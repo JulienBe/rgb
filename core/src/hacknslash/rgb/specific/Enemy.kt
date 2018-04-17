@@ -2,8 +2,8 @@ package hacknslash.rgb.specific
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import hacknslash.rgb.general.GAssMan
-import hacknslash.rgb.general.GDim
-import hacknslash.rgb.general.GVec2
+import hacknslash.rgb.general.physics.GDim
+import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GDrawer
 import hacknslash.rgb.general.gameobjects.GMover

@@ -1,6 +1,6 @@
 package hacknslash.rgb.general.gameobjects
 
-import hacknslash.rgb.general.GVec2
+import hacknslash.rgb.general.physics.GVec2
 
 interface GMover {
     val pPos : GVec2

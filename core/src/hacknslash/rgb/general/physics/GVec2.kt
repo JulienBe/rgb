@@ -1,4 +1,4 @@
-package hacknslash.rgb.general
+package hacknslash.rgb.general.physics
 
 import com.badlogic.gdx.math.Vector2
 
