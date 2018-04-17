@@ -11,11 +11,12 @@ import hacknslash.rgb.general.gameobjects.GControllable
 import hacknslash.rgb.general.gameobjects.GDrawer
 import hacknslash.rgb.general.gameobjects.GMover
 
-class Player(assMan: GAssMan, override val img: TextureRegion = assMan.square()) : GActor(dim),
+class Player private constructor(assMan: GAssMan, override val img: TextureRegion = assMan.square()) : GActor(dim),
         GDrawer,
         GMover,
         GControllable {
 
+    override val maxSpeed = 100f
     override val pPos = GVec2()
     override val dir = GVec2()
 
@@ -30,5 +31,8 @@ class Player(assMan: GAssMan, override val img: TextureRegion = assMan.square())
 
     companion object {
         val dim = GDim(10f, 10f)
+        fun get(assMan: GAssMan): Player {
+            return Player(assMan)
+        }
     }
 }

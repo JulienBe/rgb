@@ -2,7 +2,9 @@ package hacknslash.rgb.general
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.Gdx
 
 open class GScreen(val game: Game, val batch: SpriteBatch) : Screen {
 
@@ -13,6 +15,8 @@ open class GScreen(val game: Game, val batch: SpriteBatch) : Screen {
     }
 
     override fun render(delta: Float) {
+        Gdx.gl.glClearColor(1f, 0f, 0f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
     }
 
     override fun pause() {
