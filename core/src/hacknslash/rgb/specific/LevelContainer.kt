@@ -16,14 +16,14 @@ import hacknslash.rgb.general.physics.GPhysic
 class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GScreen(game, spriteBatch, width, height), InputHandler {
 
     val gPhysic = GPhysic()
-    val player = Player.get(assMan)
+    val player = Player.get(assMan, gPhysic)
     val movers: GArr<GMover> = GArr()
     val controlled: GArr<GControllable> = GArr()
     val drawers: GArr<GDrawer> = GArr()
 
     init {
         addActor(player)
-        addActor(Enemy.get(assMan))
+        addActor(Enemy.get(assMan, gPhysic))
     }
 
     override fun render(delta: Float) {

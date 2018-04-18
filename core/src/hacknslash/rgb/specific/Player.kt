@@ -10,8 +10,9 @@ import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GControllable
 import hacknslash.rgb.general.gameobjects.GDrawer
 import hacknslash.rgb.general.gameobjects.GMover
+import hacknslash.rgb.general.physics.GPhysic
 
-class Player private constructor(assMan: GAssMan, override val img: TextureRegion = assMan.square()) : GActor(dim),
+class Player private constructor(assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) : GActor(dim, physic),
         GDrawer,
         GMover,
         GControllable {
@@ -31,8 +32,8 @@ class Player private constructor(assMan: GAssMan, override val img: TextureRegio
 
     companion object {
         val dim = GDim(10f, 10f)
-        fun get(assMan: GAssMan): Player {
-            return Player(assMan)
+        fun get(assMan: GAssMan, physic: GPhysic): Player {
+            return Player(assMan, physic)
         }
     }
 }

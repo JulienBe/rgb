@@ -7,8 +7,9 @@ import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GDrawer
 import hacknslash.rgb.general.gameobjects.GMover
+import hacknslash.rgb.general.physics.GPhysic
 
-class Enemy private constructor(assMan: GAssMan, override val img: TextureRegion = assMan.square()) : GActor(dim),
+class Enemy private constructor(assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) : GActor(dim, physic),
         GDrawer,
         GMover {
     override val pPos = GVec2()
@@ -19,9 +20,9 @@ class Enemy private constructor(assMan: GAssMan, override val img: TextureRegion
         val dim = GDim(30f, 30f)
         var count = 0
 
-        fun get(assMan: GAssMan): Enemy {
+        fun get(assMan: GAssMan, physic: GPhysic): Enemy {
             count++
-            return Enemy(assMan)
+            return Enemy(assMan, physic)
         }
     }
 }
