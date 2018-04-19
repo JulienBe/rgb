@@ -9,7 +9,8 @@ interface GDrawer {
 
     //TODO remove this as
     fun draw(batch: SpriteBatch) {
-        batch.draw(img, (this as GActor).pos.x, (this as GActor).pos.y, (this as GActor).dim.width, (this as GActor).dim.height)
+        (this as GActor)
+        batch.draw(img, x, y, w, h)
     }
 
 }

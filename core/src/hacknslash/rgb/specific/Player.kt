@@ -12,22 +12,21 @@ import hacknslash.rgb.general.gameobjects.GDrawer
 import hacknslash.rgb.general.gameobjects.GMover
 import hacknslash.rgb.general.physics.GPhysic
 
-class Player private constructor(assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) : GActor(dim, physic),
+class Player private constructor(assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) : GActor(dim, GVec2(), physic),
         GDrawer,
         GMover,
         GControllable {
 
-    override val maxSpeed = 1000f
+    override val maxSpeed = 4f
     override val pPos = GVec2()
-    override val dir = GVec2()
 
     override val input: GInput = GInput()
 
     init {
-        keyPressed(Input.Keys.UP,    {dir.y += 1f})
-        keyPressed(Input.Keys.DOWN,  {dir.y -= 1f})
-        keyPressed(Input.Keys.LEFT,  {dir.x -= 1f})
-        keyPressed(Input.Keys.RIGHT, {dir.x += 1f})
+        keyPressed(Input.Keys.UP,    {addDir(0f, 8f)})
+        keyPressed(Input.Keys.DOWN,  {addDir(0f, -8f)})
+        keyPressed(Input.Keys.LEFT,  {addDir(-8f, 0f)})
+        keyPressed(Input.Keys.RIGHT, {addDir(8f, 0f)})
     }
 
     companion object {

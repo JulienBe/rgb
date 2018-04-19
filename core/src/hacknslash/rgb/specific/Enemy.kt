@@ -9,11 +9,10 @@ import hacknslash.rgb.general.gameobjects.GDrawer
 import hacknslash.rgb.general.gameobjects.GMover
 import hacknslash.rgb.general.physics.GPhysic
 
-class Enemy private constructor(assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) : GActor(dim, physic),
+class Enemy private constructor(assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) : GActor(dim, GVec2(), physic),
         GDrawer,
         GMover {
     override val pPos = GVec2()
-    override val dir = GVec2()
     override val maxSpeed = 20f
 
     companion object {
