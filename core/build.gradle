@@ -1,6 +1,6 @@
 apply plugin: "kotlin"
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.9
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
@@ -8,4 +8,9 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 
 eclipse.project {
     name = appName + "-core"
+}
+compileKotlin {
+    kotlinOptions {
+        languageVersion = "1.2"
+    }
 }

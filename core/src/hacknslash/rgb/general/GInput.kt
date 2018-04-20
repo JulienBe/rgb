@@ -1,6 +1,10 @@
 package hacknslash.rgb.general
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Screen
+import hacknslash.rgb.Rgb
+import hacknslash.rgb.specific.LevelContainer
+import java.util.logging.Level
 
 class GInput {
 
@@ -51,6 +55,12 @@ class GInput {
         click = function
     }
 
+    companion object {
+        private val wRatio = (Gdx.graphics.width / LevelContainer.width)
+        private val hRatio = (Gdx.graphics.height / LevelContainer.height)
+        fun x() = Gdx.input.x / wRatio
+        fun y() = (Gdx.graphics.height - Gdx.input.y) / hRatio
+    }
 }
 
 interface InputHandler {

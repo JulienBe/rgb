@@ -3,7 +3,7 @@ package hacknslash.rgb.general.gameobjects
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 
-interface GDrawer {
+interface GDrawable {
 
     val img: TextureRegion
 
