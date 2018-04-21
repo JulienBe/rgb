@@ -17,7 +17,7 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic, override val 
         GShooter {
 
     override val shotPatterns: Array<GShotPattern> = arrayOf(ShotPatterns.basic)
-    override val maxSpeed = Companion.maxSpeed
+    override val maxSpeed = Const.playerSpeed
     override val pPos = GVec2.get()
     override val input: GInput = GInput()
     override val shouldShoot: Boolean get() = Gdx.input.isTouched
@@ -32,8 +32,7 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic, override val 
     }
 
     companion object {
-        val dim = GDim(10f, 10f)
-        const val maxSpeed = 32f
+        val dim = GDim(5f, 5f)
         fun get(assMan: GAssMan, physic: GPhysic): Player {
             return Player(assMan, physic)
         }

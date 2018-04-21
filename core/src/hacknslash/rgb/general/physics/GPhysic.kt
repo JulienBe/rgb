@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.*
 import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GControllable
+import hacknslash.rgb.general.gameobjects.GSensor
 
 class GPhysic {
     val debugRenderer = Box2DDebugRenderer()
@@ -30,23 +31,39 @@ class GPhysic {
     }
 
     fun createBody(actor: GActor): Body {
+        val bodyDef = getBodyDef(actor)
+        val body = world.createBody(bodyDef)
+        val squareShape = PolygonShape()
+        squareShape.setAsBox(actor.hw, actor.hh)
+        body.createFixture(getFixture(squareShape, false))
+        if (actor is GSensor) {
+            val circle = CircleShape()
+            circle.radius = actor.sensorRadius
+            body.createFixture(getFixture(circle, true))
+            circle.dispose()
+        }
+        squareShape.dispose()
+        body.userData = actor
+        return body
+    }
+
+    private fun getFixture(shape: Shape, sensor: Boolean): FixtureDef {
+        val fixture = FixtureDef()
+        fixture.shape = shape
+        fixture.friction = 1f
+        fixture.restitution = 1f
+        fixture.isSensor = sensor
+        return fixture
+    }
+
+    private fun getBodyDef(actor: GActor): BodyDef {
         val bodyDef = BodyDef()
         bodyDef.type = BodyDef.BodyType.DynamicBody
         if (actor is GControllable)
             bodyDef.type = BodyDef.BodyType.KinematicBody
         bodyDef.linearDamping = 10f
         bodyDef.position.set(Vector2(actor.initPos.x + actor.hh, actor.initPos.y + actor.hw))
-        val body = world.createBody(bodyDef)
-        val squareShape = PolygonShape()
-        squareShape.setAsBox(actor.hw, actor.hh)
-        val fixture = FixtureDef()
-        fixture.shape = squareShape
-        fixture.friction = 1f
-        fixture.restitution = 1f
-        body.createFixture(fixture)
-        body.userData = actor
-        squareShape.dispose()
-        return body
+        return bodyDef
     }
 
     fun removeAll(deadActors: GArr<GActor>) {
@@ -67,10 +84,23 @@ class GPhysic {
         override fun endContact(contact: Contact?) {}
 
         override fun beginContact(contact: Contact?) {
-            val a = contact!!.fixtureA.body.userData
-            val b = contact.fixtureB.body.userData
-            (a as GActor).collide((b as GActor))
-            b.collide(a)
+            contact!!
+            val fixA = contact.fixtureA
+            val fixB = contact.fixtureB
+            val actorA = fixA.body.userData
+            val actorB = fixB.body.userData
+            actorA as GActor
+            actorB as GActor
+
+            if (!fixA.isSensor && !fixB.isSensor) {
+                actorA.collide(actorB)
+                actorB.collide(actorA)
+            } else if (!(fixA.isSensor && fixB.isSensor)) {
+                if (contact.fixtureA.isSensor)
+                    (actorA as GSensor).senses(actorB)
+                else
+                    (actorB as GSensor).senses(actorA)
+            }
         }
     }
 }

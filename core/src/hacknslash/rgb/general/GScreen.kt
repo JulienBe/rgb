@@ -18,7 +18,7 @@ open class GScreen(val game: Game, val batch: SpriteBatch, width: Float, height:
     }
 
     override fun render(delta: Float) {
-        Gdx.gl.glClearColor(1f, 0f, 0f, 1f)
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
         cam.update()
         batch.projectionMatrix = cam.combined

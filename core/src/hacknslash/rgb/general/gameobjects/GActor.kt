@@ -28,10 +28,10 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
 
     fun act(bundle: GActBundle): Boolean {
         if (this is GControllable)  control(bundle.input)
-        if (this is GDrawable)      draw(bundle.batch)
         if (this is GShooter)       shoot(bundle.assMan, bundle.physic, bundle.actors)
         if (this is GMover)         move(bundle.delta)
         if (this is GTtl)           checkTtl(bundle.delta)
+        if (this is GDrawable)      draw(bundle.batch)
         return dead
     }
 
@@ -47,4 +47,5 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
     fun remove() {
         dead = true
     }
+
 }

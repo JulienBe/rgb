@@ -15,7 +15,7 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
 
     override val img = assMan.square()
     override val pPos = GVec2.get()
-    override val maxSpeed = Bullet.maxSpeed
+    override val maxSpeed = Const.bulletSpeed
     override var ttl: Float = 3f
     override val strength: Int = 5
 
@@ -34,13 +34,12 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
 
     companion object {
         val dim = GDim(1f, 1f)
-        const val maxSpeed = Player.maxSpeed * 40f
 
         fun get(initPos: GVec2, initDir: GVec2, physic: GPhysic, assMan: GAssMan): Bullet {
             initDir.nor()
             return Bullet(
                     initPos,
-                    initDir.scl(maxSpeed),
+                    initDir.scl(Const.bulletSpeed),
                     physic,
                     assMan)
         }
