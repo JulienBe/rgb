@@ -25,10 +25,6 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
         body.linearDamping = 0f
     }
 
-    override fun ttlExpired() {
-        remove()
-    }
-
     companion object {
         val dim = GDim(1f, 1f)
         const val maxSpeed = Player.maxSpeed * 40f

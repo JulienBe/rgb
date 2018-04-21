@@ -3,6 +3,7 @@ package hacknslash.rgb.general.physics
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
+import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GControllable
 
@@ -46,6 +47,12 @@ class GPhysic {
         body.userData = actor
         squareShape.dispose()
         return body
+    }
+
+    fun removeAll(deadActors: GArr<GActor>) {
+        deadActors.forEach {
+            world.destroyBody(it.body)
+        }
     }
 
     companion object {

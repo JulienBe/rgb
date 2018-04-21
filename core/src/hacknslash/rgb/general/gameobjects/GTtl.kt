@@ -9,5 +9,8 @@ interface GTtl {
             ttlExpired()
     }
 
-    fun ttlExpired()
+    fun ttlExpired() {
+        this as GActor
+        remove()
+    }
 }

@@ -25,12 +25,13 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
     val hw: Float get() = dim.hw
     val hh: Float get() = dim.hh
 
-    fun act(bundle: GActBundle) {
+    fun act(bundle: GActBundle): Boolean {
         if (this is GControllable)  control(bundle.input)
-        if (this is GMover)         move(bundle.delta)
         if (this is GDrawable)      draw(bundle.batch)
         if (this is GShooter)       shoot(bundle.assMan, bundle.physic, bundle.actors)
+        if (this is GMover)         move(bundle.delta)
         if (this is GTtl)           checkTtl(bundle.delta)
+        return dead
     }
 
     fun collide(other: GActor) {

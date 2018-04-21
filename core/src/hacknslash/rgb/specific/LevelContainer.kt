@@ -12,6 +12,7 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
     val physic = GPhysic()
     val player = Player.get(assMan, physic)
     val actors = GArr<GActor>()
+    val deadActors = GArr<GActor>()
     val bundle = GActBundle(physic, assMan, this, spriteBatch, actors, 0f)
 
     init {
@@ -20,12 +21,18 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
 
     override fun render(delta: Float) {
         bundle.delta = delta
+        physic.removeAll(deadActors)
+        actors.removeAll(deadActors)
+        deadActors.clear()
         GClock.act(delta)
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0f)
         super.render(delta)
         batch.begin()
         player.act(bundle)
-        actors.forEach { it.act(bundle) }
+        actors.forEach {
+            if (it.act(bundle))
+                deadActors.add(it)
+        }
         batch.end()
         physic.act(delta)
         physic.debug(cam)
