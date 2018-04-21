@@ -1,5 +1,6 @@
 package hacknslash.rgb.specific
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import hacknslash.rgb.general.GAssMan
@@ -19,7 +20,7 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic, override val 
     override val maxSpeed = Companion.maxSpeed
     override val pPos = GVec2.get()
     override val input: GInput = GInput()
-
+    override val shouldShoot: Boolean get() = Gdx.input.isTouched
     override val shotDir: GVec2
         get() = GVec2.get((GInput.x() - Bullet.dim.hw) - cx, (GInput.y() - Bullet.dim.hh) - cy)
 

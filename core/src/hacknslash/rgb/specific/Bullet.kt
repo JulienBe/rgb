@@ -4,22 +4,29 @@ import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GDrawable
 import hacknslash.rgb.general.gameobjects.GMover
+import hacknslash.rgb.general.gameobjects.GTtl
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
 
 class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic, assMan: GAssMan) : GActor(dim, initPos, physic),
         GDrawable,
-        GMover {
+        GMover,
+        GTtl {
 
     override val img = assMan.square()
     override val pPos = GVec2.get()
     override val maxSpeed = Bullet.maxSpeed
+    override var ttl: Float = 3f
 
     init {
         // works but probably flimsy
         body.applyForceToCenter(initDir, true)
         body.linearDamping = 0f
+    }
+
+    override fun ttlExpired() {
+        remove()
     }
 
     companion object {
