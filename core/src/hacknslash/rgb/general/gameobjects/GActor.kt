@@ -14,6 +14,7 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
             box2DBody = physic.createBody(this)
         return box2DBody
     }
+    open var hp = 1
     var dead = false
     val center: Vector2 get() = body.position
     val cx: Float get() = center.x
@@ -34,7 +35,13 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
         return dead
     }
 
-    fun collide(other: GActor) {
+    fun dead() {
+        remove()
+    }
+
+    open fun collide(other: GActor) {
+        if (hp <= 0)
+            dead()
     }
 
     fun remove() {

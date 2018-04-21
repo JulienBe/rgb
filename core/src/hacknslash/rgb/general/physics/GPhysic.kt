@@ -70,6 +70,7 @@ class GPhysic {
             val a = contact!!.fixtureA.body.userData
             val b = contact.fixtureB.body.userData
             (a as GActor).collide((b as GActor))
+            b.collide(a)
         }
     }
 }
