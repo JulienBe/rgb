@@ -3,7 +3,9 @@
 #
 
 import track:"hacknslash.rgb.general.behaviors.GTrackTask"
+import wander:"hacknslash.rgb.general.behaviors.GWanderTask"
 
 root
-    sequence
+    selector
         track
+        wander

@@ -36,10 +36,12 @@ class GPhysic {
         val squareShape = PolygonShape()
         squareShape.setAsBox(actor.hw, actor.hh)
         body.createFixture(getFixture(squareShape, false))
+        println("CREATING " + actor + "which is sensor ? " + (actor is GSensor))
         if (actor is GSensor) {
             val circle = CircleShape()
             circle.radius = actor.sensorRadius
             body.createFixture(getFixture(circle, true))
+            println("CREATED SENSOR")
             circle.dispose()
         }
         squareShape.dispose()
