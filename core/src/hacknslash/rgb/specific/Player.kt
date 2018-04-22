@@ -3,7 +3,7 @@ package hacknslash.rgb.specific
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import hacknslash.rgb.general.GAssMan
+import hacknslash.rgb.general.graphics.GAssMan
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.GInput
 import hacknslash.rgb.general.gameobjects.*

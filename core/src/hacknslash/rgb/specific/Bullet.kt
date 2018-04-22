@@ -1,6 +1,6 @@
 package hacknslash.rgb.specific
 
-import hacknslash.rgb.general.GAssMan
+import hacknslash.rgb.general.graphics.GAssMan
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic

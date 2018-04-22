@@ -3,6 +3,7 @@ package hacknslash.rgb.general.gameobjects
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import hacknslash.rgb.general.GActBundle
+import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
@@ -32,6 +33,7 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
         if (this is GMover)         move(bundle.delta)
         if (this is GTtl)           checkTtl(bundle.delta)
         if (this is GDrawable)      draw(bundle.batch)
+        if (this is GAiBTree)       step()
         return dead
     }
 

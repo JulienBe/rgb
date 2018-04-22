@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import hacknslash.rgb.general.*
 import hacknslash.rgb.general.gameobjects.*
+import hacknslash.rgb.general.graphics.GAssMan
+import hacknslash.rgb.general.graphics.GScreen
 import hacknslash.rgb.general.physics.GPhysic
 
 

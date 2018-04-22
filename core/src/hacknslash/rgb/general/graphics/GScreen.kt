@@ -1,4 +1,4 @@
-package hacknslash.rgb.general
+package hacknslash.rgb.general.graphics
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Screen

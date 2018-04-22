@@ -1,7 +1,7 @@
 package hacknslash.rgb.general.gameobjects
 
 import hacknslash.rgb.general.GArr
-import hacknslash.rgb.general.GAssMan
+import hacknslash.rgb.general.graphics.GAssMan
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
 

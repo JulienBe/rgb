@@ -1,0 +1,9 @@
+#
+# Enemy tree
+#
+
+import track:"hacknslash.rgb.general.behaviors.GTrackTask"
+
+root
+    sequence
+        track
