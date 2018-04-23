@@ -12,7 +12,7 @@ class GTrackTask: LeafTask<GTracker>() {
     override fun execute(): Status {
         `object`.target?.let {
             `object`.track()
-            return Status.RUNNING
+            return Status.SUCCEEDED
         }
         return Status.FAILED
     }

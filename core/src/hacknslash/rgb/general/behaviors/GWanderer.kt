@@ -6,10 +6,12 @@ import hacknslash.rgb.general.physics.GSide
 
 interface GWanderer {
     var prevRotation: GSide
+    val wanderPush: Float
+    val wanderPushDelay: Float
 
     fun dir(): Vector2? {
         this as GActor
-        return dir
+        return body.linearVelocity
     }
 
     fun impulse(i: Vector2) {

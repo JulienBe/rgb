@@ -36,12 +36,10 @@ class GPhysic {
         val squareShape = PolygonShape()
         squareShape.setAsBox(actor.hw, actor.hh)
         body.createFixture(getFixture(squareShape, false))
-        println("CREATING " + actor + "which is sensor ? " + (actor is GSensor))
         if (actor is GSensor) {
             val circle = CircleShape()
             circle.radius = actor.sensorRadius
             body.createFixture(getFixture(circle, true))
-            println("CREATED SENSOR")
             circle.dispose()
         }
         squareShape.dispose()
@@ -52,7 +50,7 @@ class GPhysic {
     private fun getFixture(shape: Shape, sensor: Boolean): FixtureDef {
         val fixture = FixtureDef()
         fixture.shape = shape
-        fixture.friction = 1f
+        fixture.friction = 0.1f
         fixture.restitution = 1f
         fixture.isSensor = sensor
         return fixture
@@ -63,7 +61,7 @@ class GPhysic {
         bodyDef.type = BodyDef.BodyType.DynamicBody
         if (actor is GControllable)
             bodyDef.type = BodyDef.BodyType.KinematicBody
-        bodyDef.linearDamping = 10f
+        bodyDef.linearDamping = 0.1f
         bodyDef.position.set(Vector2(actor.initPos.x + actor.hh, actor.initPos.y + actor.hw))
         return bodyDef
     }
@@ -83,7 +81,9 @@ class GPhysic {
     class GContactListener : ContactListener {
         override fun preSolve(contact: Contact?, oldManifold: Manifold?) {}
         override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {}
-        override fun endContact(contact: Contact?) {}
+        override fun endContact(contact: Contact?) {
+
+        }
 
         override fun beginContact(contact: Contact?) {
             contact!!

@@ -29,6 +29,8 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
     override var target: GActor? = null
     override var trackImpulseStrength: Float = 10f
     override var prevRotation: GSide = GSide.RIGHT
+    override val wanderPush: Float = 10f
+    override val wanderPushDelay: Float = 0.2f
 
     override fun collide(other: GActor) {
         if (other is GHitter)

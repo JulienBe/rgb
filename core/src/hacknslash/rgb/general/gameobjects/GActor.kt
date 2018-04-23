@@ -26,7 +26,6 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
     val h: Float get() = dim.height
     val hw: Float get() = dim.hw
     val hh: Float get() = dim.hh
-    val dir: Vector2 = body.linearVelocity
 
     fun act(bundle: GActBundle): Boolean {
         if (this is GControllable)  control(bundle.input)
