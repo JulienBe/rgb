@@ -2,6 +2,8 @@ package hacknslash.rgb.general.gameobjects
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef
+import com.badlogic.gdx.physics.box2d.World
 import hacknslash.rgb.general.GActBundle
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.physics.GDim
@@ -10,13 +12,16 @@ import hacknslash.rgb.general.physics.GVec2
 
 open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
     private lateinit var box2DBody: Body
-    val body: Body get() {
+    private val body: Body get() {
         if (!::box2DBody.isInitialized)
             box2DBody = physic.createBody(this)
         return box2DBody
     }
+    val bodyType: BodyDef.BodyType get() = body.type
+    val dir: Vector2 get() = body.linearVelocity
     open var hp = 1
     var dead = false
+    val speed2: Float get() = body.linearVelocity.len2()
     val center: Vector2 get() = body.position
     val cx: Float get() = center.x
     val cy: Float get() = center.y
@@ -46,8 +51,35 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
             dead()
     }
 
+    open fun stopCollide(other: GActor) {
+    }
+
     fun remove() {
         dead = true
+    }
+
+    fun applyForce(dir: Vector2) {
+        body.applyForceToCenter(dir, true)
+    }
+
+    fun setDamping(d: Float) {
+        body.linearDamping = d
+    }
+
+    fun destroyBody(world: World) {
+        world.destroyBody(body)
+    }
+
+    fun setSpeed2(velocity: Float) {
+        body.linearVelocity = body.linearVelocity.setLength2(velocity)
+    }
+
+    fun impulse(x: Float, y: Float) {
+        body.applyLinearImpulse(x, y, cx, cy, true)
+    }
+
+    fun addVelocity(x: Float, y: Float) {
+        body.linearVelocity = body.linearVelocity.add(x, y)
     }
 
 }

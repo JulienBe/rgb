@@ -7,13 +7,12 @@ import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
 import hacknslash.rgb.general.graphics.GAssMan
 import hacknslash.rgb.general.gameobjects.*
-import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
 
 class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) :
-        GActor(dim, GVec2.get(x, y), physic),
+        GActor(Const.enemyDim, GVec2.get(x, y), physic),
         GDrawable,
         GMover,
         GSensor,
@@ -22,15 +21,15 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GWanderer {
 
     override val pPos = GVec2.get()
-    override val maxSpeed = 20f
+    override val maxSpeed = Const.enemySpeed
+    override var trackImpulseStrength: Float = maxSpeed / 80f
+    override val wanderPush: Float = maxSpeed / 2f
+    override val wanderPushDelay: Float = 0.2f
     override var hp = 10
-    override val sensorRadius = dim.width * 3
+    override val sensorRadius = Const.enemySenseRadius
     override var bTree: BehaviorTree<GAiBTree> = initTree("enemy")
     override var target: GActor? = null
-    override var trackImpulseStrength: Float = 10f
     override var prevRotation: GSide = GSide.RIGHT
-    override val wanderPush: Float = 10f
-    override val wanderPushDelay: Float = 0.2f
 
     override fun collide(other: GActor) {
         if (other is GHitter)
@@ -43,9 +42,13 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
             target = a
         super.senses(a)
     }
+    override fun stopSenses(a: GActor) {
+        if (a is Player)
+            target = null
+        super.senses(a)
+    }
 
     companion object {
-        val dim = GDim(10f, 10f)
         var count = 0
 
         fun get(assMan: GAssMan, physic: GPhysic): Enemy {

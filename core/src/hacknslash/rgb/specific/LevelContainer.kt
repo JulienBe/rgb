@@ -28,6 +28,7 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
         deadActors.clear()
         GClock.act(delta)
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0f)
+        physic.act(delta)
         super.render(delta)
         batch.begin()
         player.act(bundle)
@@ -36,7 +37,6 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
                 deadActors.add(it)
         }
         batch.end()
-        physic.act(delta)
         physic.debug(cam)
     }
 

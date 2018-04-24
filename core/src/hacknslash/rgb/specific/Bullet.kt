@@ -21,8 +21,8 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
 
     init {
         // works but probably flimsy
-        body.applyForceToCenter(initDir, true)
-        body.linearDamping = 0f
+        applyForce(initDir)
+        setDamping(0f)
     }
 
     override fun collide(other: GActor) {

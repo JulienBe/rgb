@@ -7,6 +7,7 @@ import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GControllable
 import hacknslash.rgb.general.gameobjects.GSensor
+import kotlin.reflect.KFunction2
 
 class GPhysic {
     val debugRenderer = Box2DDebugRenderer()
@@ -68,7 +69,7 @@ class GPhysic {
 
     fun removeAll(deadActors: GArr<GActor>) {
         deadActors.forEach {
-            world.destroyBody(it.body)
+            it.destroyBody(world)
         }
     }
 
@@ -81,11 +82,16 @@ class GPhysic {
     class GContactListener : ContactListener {
         override fun preSolve(contact: Contact?, oldManifold: Manifold?) {}
         override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {}
-        override fun endContact(contact: Contact?) {
 
+        override fun endContact(contact: Contact?) {
+            check(contact, GActor::stopCollide, GSensor::stopSenses)
         }
 
         override fun beginContact(contact: Contact?) {
+            check(contact, GActor::collide, GSensor::senses)
+        }
+
+        private fun check(contact: Contact?, collision: KFunction2<GActor, @ParameterName(name = "other") GActor, Unit>, sens: KFunction2<GSensor, @ParameterName(name = "a") GActor, Unit>) {
             contact!!
             val fixA = contact.fixtureA
             val fixB = contact.fixtureB
@@ -95,13 +101,13 @@ class GPhysic {
             actorB as GActor
 
             if (!fixA.isSensor && !fixB.isSensor) {
-                actorA.collide(actorB)
-                actorB.collide(actorA)
+                collision(actorA, actorB)
+                collision(actorB, actorA)
             } else if (!(fixA.isSensor && fixB.isSensor)) {
                 if (contact.fixtureA.isSensor)
-                    (actorA as GSensor).senses(actorB)
+                    sens((actorA as GSensor), actorB)
                 else
-                    (actorB as GSensor).senses(actorA)
+                    sens((actorB as GSensor), actorA)
             }
         }
     }
