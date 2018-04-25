@@ -9,19 +9,29 @@ import hacknslash.rgb.general.graphics.GScreen
 import hacknslash.rgb.general.physics.GPhysic
 
 
-class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GScreen(game, spriteBatch, width, height), InputHandler {
+class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: SpriteBatch) : GScreen(game, spriteBatch, width, height), InputHandler {
 
     val physic = GPhysic()
     val player = Player.get(assMan, physic)
     val actors = GArr<GActor>()
     val deadActors = GArr<GActor>()
     val bundle = GActBundle(physic, assMan, this, spriteBatch, actors, 0f)
+    var enemiesNumber = 1
+    val map = GLevelLoader.load("one", physic, assMan)
 
     init {
-        actors.add(Enemy.get(assMan, physic))
-        GLevelLoader.load("one", physic, assMan).forEach {
+        spawnEnemy(assMan)
+        map.walls.forEach {
             actors.add(it)
         }
+    }
+
+    private fun spawnEnemy(assMan: GAssMan) {
+        actors.add(Enemy.get(
+                GRand.within(map.lowX, map.highX - Enemy.dim.width),
+                GRand.within(map.lowY, map.highY- Enemy.dim.height),
+                assMan,
+                physic))
     }
 
     override fun render(delta: Float) {
@@ -39,8 +49,17 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
             if (it.act(bundle))
                 deadActors.add(it)
         }
+        crowdControl()
         batch.end()
         physic.debug(cam)
+    }
+
+    private fun crowdControl() {
+        if (enemiesNumber > Enemy.count) {
+            spawnEnemy(assMan)
+            if (GRand.nextFloat() > 0.8f)
+                enemiesNumber++
+        }
     }
 
     companion object {

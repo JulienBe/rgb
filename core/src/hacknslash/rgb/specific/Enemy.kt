@@ -2,11 +2,13 @@ package hacknslash.rgb.specific
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
 import hacknslash.rgb.general.graphics.GAssMan
 import hacknslash.rgb.general.gameobjects.*
+import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
@@ -48,12 +50,19 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         super.senses(a)
     }
 
+    override fun dead() {
+        count--
+        super.dead()
+    }
+
+
     companion object {
         var count = 0
+        val dim = Const.enemyDim
 
-        fun get(assMan: GAssMan, physic: GPhysic): Enemy {
+        fun get(x: Float, y: Float, assMan: GAssMan, physic: GPhysic): Enemy {
             count++
-            return Enemy(40f, 40f, assMan, physic)
+            return Enemy(x, y, assMan, physic)
         }
     }
 }

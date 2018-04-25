@@ -31,6 +31,8 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
     val h: Float get() = dim.height
     val hw: Float get() = dim.hw
     val hh: Float get() = dim.hh
+    val rightX: Float get() = x + w
+    val upY: Float get() = y + h
 
     fun act(bundle: GActBundle): Boolean {
         if (this is GControllable)  control(bundle.input)
@@ -42,7 +44,7 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
         return dead
     }
 
-    fun dead() {
+    open fun dead() {
         remove()
     }
 
