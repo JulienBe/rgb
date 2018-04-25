@@ -60,6 +60,8 @@ class GInput {
         private val hRatio = (Gdx.graphics.height / LevelContainer.height)
         fun x() = Gdx.input.x / wRatio
         fun y() = (Gdx.graphics.height - Gdx.input.y) / hRatio
+        fun centerW() = (Gdx.graphics.width / 2f) / wRatio
+        fun centerH() = (Gdx.graphics.height / 2f) / hRatio
     }
 }
 

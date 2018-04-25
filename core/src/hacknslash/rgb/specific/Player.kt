@@ -23,9 +23,10 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic) : GActor(Cons
     override val input: GInput = GInput()
     override val shouldShoot: Boolean get() = Gdx.input.isTouched
     override val shotDir: GVec2
-        get() = GVec2.get((GInput.x() - Bullet.dim.hw) - cx, (GInput.y() - Bullet.dim.hh) - cy)
+        get() = GVec2.get((GInput.x() - Bullet.dim.hw) - GInput.centerW(), (GInput.y() - Bullet.dim.hh) - GInput.centerH())
 
     init {
+        keyPressed(Input.Keys.SPACE, { println(GInput.x())})
         keyPressed(Input.Keys.UP,    {addVelocity(0f, Const.playerImpulse)})
         keyPressed(Input.Keys.DOWN,  {addVelocity(0f, -Const.playerImpulse)})
         keyPressed(Input.Keys.LEFT,  {addVelocity(-Const.playerImpulse, 0f)})
