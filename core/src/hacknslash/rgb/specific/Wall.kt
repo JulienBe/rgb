@@ -10,7 +10,8 @@ import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
 
-class Wall(dim: GDim, initPos: GVec2, physic: GPhysic, assMan: GAssMan) : GActor(dim, initPos, physic),
+class Wall(dim: GDim, initPos: GVec2, physic: GPhysic, assMan: GAssMan) :
+        GActor(dim, initPos, physic, CollisionBits.wall, CollisionBits.wallCollisions),
         GDrawable,
         GStatic {
 

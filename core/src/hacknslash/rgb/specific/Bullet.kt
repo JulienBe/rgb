@@ -7,7 +7,7 @@ import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
 
 class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic, assMan: GAssMan) :
-        GActor(dim, initPos, physic),
+        GActor(dim, initPos, physic, CollisionBits.bullet, CollisionBits.bulletCollisions),
         GDrawable,
         GMover,
         GTtl,

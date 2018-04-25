@@ -10,7 +10,8 @@ import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 
-class Player private constructor(assMan: GAssMan, physic: GPhysic) : GActor(Const.playerDim, GVec2.get(), physic),
+class Player private constructor(assMan: GAssMan, physic: GPhysic) :
+        GActor(Const.playerDim, GVec2.get(), physic, CollisionBits.player, CollisionBits.playerCollisions),
         GDrawable,
         GMover,
         GControllable,
@@ -26,7 +27,6 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic) : GActor(Cons
         get() = GVec2.get((GInput.x() - Bullet.dim.hw) - GInput.centerW(), (GInput.y() - Bullet.dim.hh) - GInput.centerH())
 
     init {
-        keyPressed(Input.Keys.SPACE, { println(GInput.x())})
         keyPressed(Input.Keys.UP,    {addVelocity(0f, Const.playerImpulse)})
         keyPressed(Input.Keys.DOWN,  {addVelocity(0f, -Const.playerImpulse)})
         keyPressed(Input.Keys.LEFT,  {addVelocity(-Const.playerImpulse, 0f)})

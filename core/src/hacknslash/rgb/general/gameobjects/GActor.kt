@@ -10,7 +10,7 @@ import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
 
-open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic) {
+open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val isA: Short, val collidesWith: Short) {
     private lateinit var box2DBody: Body
     private val body: Body get() {
         if (!::box2DBody.isInitialized)

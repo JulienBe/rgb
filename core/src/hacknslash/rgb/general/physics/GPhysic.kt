@@ -37,11 +37,11 @@ class GPhysic {
         val body = world.createBody(bodyDef)
         val squareShape = PolygonShape()
         squareShape.setAsBox(actor.hw, actor.hh)
-        body.createFixture(getFixture(squareShape, false))
+        body.createFixture(getFixture(actor, squareShape, false))
         if (actor is GSensor) {
             val circle = CircleShape()
             circle.radius = actor.sensorRadius
-            body.createFixture(getFixture(circle, true))
+            body.createFixture(getFixture(actor, circle, true))
             circle.dispose()
         }
         squareShape.dispose()
@@ -49,12 +49,14 @@ class GPhysic {
         return body
     }
 
-    private fun getFixture(shape: Shape, sensor: Boolean): FixtureDef {
+    private fun getFixture(actor: GActor, shape: Shape, sensor: Boolean): FixtureDef {
         val fixture = FixtureDef()
         fixture.shape = shape
         fixture.friction = 0.1f
         fixture.restitution = 1f
         fixture.isSensor = sensor
+        fixture.filter.categoryBits = actor.isA
+        fixture.filter.maskBits = actor.collidesWith
         return fixture
     }
 

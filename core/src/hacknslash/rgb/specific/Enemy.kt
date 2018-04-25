@@ -12,7 +12,7 @@ import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
 
 class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) :
-        GActor(Const.enemyDim, GVec2.get(x, y), physic),
+        GActor(Const.enemyDim, GVec2.get(x, y), physic, CollisionBits.enemy, CollisionBits.enemyCollisions),
         GDrawable,
         GMover,
         GSensor,
