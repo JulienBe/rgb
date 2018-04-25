@@ -10,12 +10,13 @@ import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 
-class Player private constructor(assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) : GActor(Const.playerDim, GVec2.get(), physic),
+class Player private constructor(assMan: GAssMan, physic: GPhysic) : GActor(Const.playerDim, GVec2.get(), physic),
         GDrawable,
         GMover,
         GControllable,
         GShooter {
 
+    override val img: TextureRegion = assMan.square()
     override val shotPatterns: Array<GShotPattern> = arrayOf(ShotPatterns.basic)
     override val maxSpeed = Const.playerSpeed
     override val pPos = GVec2.get()

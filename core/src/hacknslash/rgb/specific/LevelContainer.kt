@@ -19,6 +19,9 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
 
     init {
         actors.add(Enemy.get(assMan, physic))
+        GLevelLoader.load("one", physic, assMan).forEach {
+            actors.add(it)
+        }
     }
 
     override fun render(delta: Float) {
@@ -27,7 +30,7 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
         actors.removeAll(deadActors)
         deadActors.clear()
         GClock.act(delta)
-        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0f)
+        cam.position.set(player.cx, player.cy, GClock.time)
         physic.act(delta)
         super.render(delta)
         batch.begin()

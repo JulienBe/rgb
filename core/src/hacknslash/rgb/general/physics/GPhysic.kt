@@ -7,6 +7,7 @@ import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GControllable
 import hacknslash.rgb.general.gameobjects.GSensor
+import hacknslash.rgb.general.gameobjects.GStatic
 import kotlin.reflect.KFunction2
 
 class GPhysic {
@@ -62,8 +63,10 @@ class GPhysic {
         bodyDef.type = BodyDef.BodyType.DynamicBody
         if (actor is GControllable)
             bodyDef.type = BodyDef.BodyType.KinematicBody
+        if (actor is GStatic)
+            bodyDef.type = BodyDef.BodyType.StaticBody
         bodyDef.linearDamping = 0.1f
-        bodyDef.position.set(Vector2(actor.initPos.x + actor.hh, actor.initPos.y + actor.hw))
+        bodyDef.position.set(Vector2(actor.initPos.x + actor.hw, actor.initPos.y + actor.hh))
         return bodyDef
     }
 
