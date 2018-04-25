@@ -8,12 +8,12 @@ import hacknslash.rgb.specific.Wall
 
 object GLevelLoader {
 
-    fun load(name: String, physics: GPhysic, assMan: GAssMan): List<Wall> {
+    fun load(name: String, physics: GPhysic, assMan: GAssMan): GMap {
         val map = TmxMapLoader().load("map/$name.tmx")
         val wallsObj = map.layers.get("Walls").objects
-        return wallsObj.map {
+        return GMap(wallsObj.map {
             it as RectangleMapObject
             Wall.get(it.rectangle, physics, assMan)
-        }
+        })
     }
 }
