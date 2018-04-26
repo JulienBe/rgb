@@ -6,6 +6,7 @@ import hacknslash.rgb.general.*
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.graphics.GScreen
+import hacknslash.rgb.general.particles.GParticle
 import hacknslash.rgb.general.physics.GPhysic
 
 
@@ -15,7 +16,9 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
     val player = Player.get(assMan, physic)
     val actors = GArr<GActor>()
     val deadActors = GArr<GActor>()
-    val bundle = GActBundle(physic, assMan, this, spriteBatch, actors, 0f)
+    val particles = GArr<GParticle>()
+    val deadParticles = GArr<GParticle>()
+    val bundle = GActBundle(physic, assMan, this, spriteBatch, actors, 0f, particles)
     var enemiesNumber = 1
     val map = GLevelLoader.load("one", physic, assMan)
 
@@ -36,14 +39,22 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
 
     override fun render(delta: Float) {
         bundle.delta = delta
+
         physic.removeAll(deadActors)
         actors.removeAll(deadActors)
+        particles.removeAll(deadParticles)
+
         deadActors.clear()
         GClock.act(delta)
         cam.position.set(player.cx, player.cy, GClock.time)
         physic.act(delta)
         super.render(delta)
+
         batch.begin()
+        particles.forEach {
+            if (it.draw(batch))
+                deadParticles.add(it)
+        }
         player.act(bundle)
         actors.forEach {
             if (it.act(bundle))

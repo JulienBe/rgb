@@ -3,9 +3,12 @@ package hacknslash.rgb.specific
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import hacknslash.rgb.general.GActBundle
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.GInput
+import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.gameobjects.*
+import hacknslash.rgb.general.particles.GStaticParticle
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 
@@ -30,6 +33,11 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic) :
         keyPressed(Input.Keys.DOWN,  {addVelocity(0f, -Const.playerImpulse)})
         keyPressed(Input.Keys.LEFT,  {addVelocity(-Const.playerImpulse, 0f)})
         keyPressed(Input.Keys.RIGHT, {addVelocity(Const.playerImpulse, 0f)})
+    }
+
+    override fun act(bundle: GActBundle): Boolean {
+        bundle.particles.add(GStaticParticle.get(x, y, dim.width, 30 + GRand.nextInt(30), bundle.assMan))
+        return super.act(bundle)
     }
 
     override fun move(delta: Float) {
