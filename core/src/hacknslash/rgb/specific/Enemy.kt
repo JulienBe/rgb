@@ -2,13 +2,11 @@ package hacknslash.rgb.specific
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
-import hacknslash.rgb.general.graphics.GAssMan
+import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.gameobjects.*
-import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
@@ -22,6 +20,7 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GTracker,
         GWanderer {
 
+    val explosion = assMan.getEnemyExplosion()
     override val pPos = GVec2.get()
     override val maxSpeed = Const.enemySpeed
     override var trackImpulseStrength: Float = maxSpeed / 80f
@@ -52,6 +51,7 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
 
     override fun dead() {
         count--
+        explosion.play()
         super.dead()
     }
 

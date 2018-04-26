@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GDrawable
 import hacknslash.rgb.general.gameobjects.GStatic
-import hacknslash.rgb.general.graphics.GAssMan
+import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2

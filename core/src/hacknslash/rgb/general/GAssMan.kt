@@ -1,15 +1,17 @@
-package hacknslash.rgb.general.graphics
+package hacknslash.rgb.general
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 
 class GAssMan : AssetManager(), AssetErrorListener {
 
-    val pack = "atlas.atlas"
+    private val pack = "atlas.atlas"
+    private lateinit var enemyExplosion: Sound
 
     init {
         setErrorListener(this)
@@ -27,5 +29,12 @@ class GAssMan : AssetManager(), AssetErrorListener {
     fun square(): TextureAtlas.AtlasRegion {
         val atlas = get(pack, TextureAtlas::class.java)
         return atlas.findRegion("whitesqure")
+    }
+
+    fun getEnemyExplosion(): Sound {
+        if (!::enemyExplosion.isInitialized) {
+            enemyExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosionenemy.wav"))
+        }
+        return enemyExplosion
     }
 }

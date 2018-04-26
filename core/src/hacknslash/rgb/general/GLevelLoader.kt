@@ -2,7 +2,6 @@ package hacknslash.rgb.general
 
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
-import hacknslash.rgb.general.graphics.GAssMan
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.specific.Wall
 

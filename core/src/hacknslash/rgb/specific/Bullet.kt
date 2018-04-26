@@ -1,6 +1,6 @@
 package hacknslash.rgb.specific
 
-import hacknslash.rgb.general.graphics.GAssMan
+import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
@@ -28,7 +28,6 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
     override fun collide(other: GActor) {
         if (other is Enemy)
             ttlExpired()
-        println("Bullet.collide")
         super.collide(other)
     }
 
