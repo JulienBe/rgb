@@ -8,18 +8,22 @@ import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.GInput
 import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.gameobjects.*
-import hacknslash.rgb.general.particles.GStaticParticle
+import hacknslash.rgb.general.particles.GObjectParticle
+import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 
 class Player private constructor(assMan: GAssMan, physic: GPhysic) :
         GActor(Const.playerDim, GVec2.get(), physic, CollisionBits.player, CollisionBits.playerCollisions),
-        GDrawable,
         GMover,
         GControllable,
-        GShooter {
+        GShooter,
+        GObjectParticleEmitter {
 
-    override val img: TextureRegion = assMan.square()
+    override val particlesAmout: Int = 4
+    override val r: Float = 1f
+    override val g: Float = 1f
+    override val b: Float = 1f
     override val shotPatterns: Array<GShotPattern> = arrayOf(ShotPatterns.basic)
     override val maxSpeed = Const.playerSpeed
     override val pPos = GVec2.get()
@@ -33,11 +37,6 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic) :
         keyPressed(Input.Keys.DOWN,  {addVelocity(0f, -Const.playerImpulse)})
         keyPressed(Input.Keys.LEFT,  {addVelocity(-Const.playerImpulse, 0f)})
         keyPressed(Input.Keys.RIGHT, {addVelocity(Const.playerImpulse, 0f)})
-    }
-
-    override fun act(bundle: GActBundle): Boolean {
-        bundle.particles.add(GStaticParticle.get(x, y, dim.width, 30 + GRand.nextInt(30), bundle.assMan))
-        return super.act(bundle)
     }
 
     override fun move(delta: Float) {

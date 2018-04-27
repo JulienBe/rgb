@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
 import hacknslash.rgb.general.GActBundle
 import hacknslash.rgb.general.behaviors.GAiBTree
+import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
@@ -35,12 +36,13 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
     val upY: Float get() = y + h
 
     open fun act(bundle: GActBundle): Boolean {
-        if (this is GControllable)  control(bundle.input)
-        if (this is GShooter)       shoot(bundle.assMan, bundle.physic, bundle.actors)
-        if (this is GMover)         move(bundle.delta)
-        if (this is GTtl)           checkTtl(bundle.delta)
-        if (this is GDrawable)      draw(bundle.batch)
-        if (this is GAiBTree)       step()
+        if (this is GControllable)          control(bundle.input)
+        if (this is GShooter)               shoot(bundle.assMan, bundle.physic, bundle.actors)
+        if (this is GMover)                 move(bundle.delta)
+        if (this is GTtl)                   checkTtl(bundle.delta)
+        if (this is GDrawable)              draw(bundle.batch)
+        if (this is GAiBTree)               step()
+        if (this is GObjectParticleEmitter) emit(bundle)
         return dead
     }
 

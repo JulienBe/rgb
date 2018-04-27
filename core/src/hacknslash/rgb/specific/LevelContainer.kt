@@ -44,6 +44,8 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
         actors.removeAll(deadActors)
         particles.removeAll(deadParticles)
 
+        deadParticles.forEach { it.free() }
+        deadParticles.clear()
         deadActors.clear()
         GClock.act(delta)
         cam.position.set(player.cx, player.cy, GClock.time)
@@ -55,6 +57,7 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
             if (it.draw(batch))
                 deadParticles.add(it)
         }
+        batch.setColor(1f, 1f, 1f, 1f)
         player.act(bundle)
         actors.forEach {
             if (it.act(bundle))

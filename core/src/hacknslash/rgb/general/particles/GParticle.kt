@@ -10,5 +10,6 @@ abstract class GParticle: Pool.Poolable {
     lateinit var texture: TextureRegion
 
     abstract fun draw(batch: SpriteBatch): Boolean
+    abstract fun free()
 
 }

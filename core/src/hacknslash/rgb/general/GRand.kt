@@ -16,4 +16,11 @@ object GRand: Random() {
         }
         return within(low, high)
     }
+
+    fun gauss(f: Float): Float {
+        return (nextGaussian() * f).toFloat()
+    }
+    fun gauss(i: Int): Int {
+        return (nextGaussian() * i).toInt()
+    }
 }

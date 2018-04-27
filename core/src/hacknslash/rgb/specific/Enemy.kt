@@ -2,25 +2,32 @@ package hacknslash.rgb.specific
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import hacknslash.rgb.general.GActBundle
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.gameobjects.*
+import hacknslash.rgb.general.particles.GObjectParticle
+import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
 
-class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPhysic, override val img: TextureRegion = assMan.square()) :
+class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPhysic) :
         GActor(Const.enemyDim, GVec2.get(x, y), physic, CollisionBits.enemy, CollisionBits.enemyCollisions),
-        GDrawable,
         GMover,
         GSensor,
         GAiBTree,
         GTracker,
-        GWanderer {
+        GWanderer,
+        GObjectParticleEmitter {
 
+    override val r: Float = 1f
+    override val g: Float = 0f
+    override val b: Float = 0f
     val explosion = assMan.getEnemyExplosion()
+    override val particlesAmout: Int get() = hp
     override val pPos = GVec2.get()
     override val maxSpeed = Const.enemySpeed
     override var trackImpulseStrength: Float = maxSpeed / 80f
@@ -31,6 +38,10 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
     override var bTree: BehaviorTree<GAiBTree> = initTree("enemy")
     override var target: GActor? = null
     override var prevRotation: GSide = GSide.RIGHT
+
+    override fun ttl(): Int {
+        return hp * 10
+    }
 
     override fun collide(other: GActor) {
         if (other is GHitter)
