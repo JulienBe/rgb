@@ -34,6 +34,8 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
     val hh: Float get() = dim.hh
     val rightX: Float get() = x + w
     val upY: Float get() = y + h
+    val speedX: Float get() = body.linearVelocity.x
+    val speedY: Float get() = body.linearVelocity.y
 
     open fun act(bundle: GActBundle): Boolean {
         if (this is GControllable)          control(bundle.input)

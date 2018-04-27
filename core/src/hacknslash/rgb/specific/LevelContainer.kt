@@ -2,6 +2,7 @@ package hacknslash.rgb.specific
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import hacknslash.rgb.general.*
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.GAssMan
@@ -21,8 +22,10 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
     val bundle = GActBundle(physic, assMan, this, spriteBatch, actors, 0f, particles)
     var enemiesNumber = 1
     val map = GLevelLoader.load("one", physic, assMan)
+    val shapeRenderer = ShapeRenderer()
 
     init {
+        shapeRenderer.setAutoShapeType(true)
         spawnEnemy(assMan)
         map.walls.forEach {
             actors.add(it)
@@ -65,6 +68,13 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
         }
         crowdControl()
         batch.end()
+        shapeRenderer.projectionMatrix = cam.combined
+        shapeRenderer.begin()
+        actors.forEach {
+            shapeRenderer.line(it.cx, it.cy, it.cx + it.speedX, it.cy + it.speedY)
+        }
+        shapeRenderer.line(player.cx, player.cy, player.cx + player.speedX, player.cy + player.speedY)
+        shapeRenderer.end()
 //        physic.debug(cam)
     }
 

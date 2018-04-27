@@ -1,18 +1,20 @@
 package hacknslash.rgb.specific
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import hacknslash.rgb.general.GActBundle
+import hacknslash.rgb.general.GArr
+import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.behaviors.GAiBTree
+import hacknslash.rgb.general.behaviors.GAvoider
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
-import hacknslash.rgb.general.GAssMan
-import hacknslash.rgb.general.gameobjects.*
-import hacknslash.rgb.general.particles.GObjectParticle
+import hacknslash.rgb.general.gameobjects.GActor
+import hacknslash.rgb.general.gameobjects.GHitter
+import hacknslash.rgb.general.gameobjects.GMover
+import hacknslash.rgb.general.gameobjects.GSensor
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
-import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
+import hacknslash.rgb.general.physics.GVec2
 
 class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPhysic) :
         GActor(Const.enemyDim, GVec2.get(x, y), physic, CollisionBits.enemy, CollisionBits.enemyCollisions),
@@ -20,17 +22,20 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GSensor,
         GAiBTree,
         GTracker,
+        GAvoider,
         GWanderer,
         GObjectParticleEmitter {
 
+    override var stuffToAvoid: GArr<GActor> = GArr()
+    override var avoidImpulseStrenght: Float = 1f
     override val r: Float = 1f
     override val g: Float = 0f
     override val b: Float = 0f
-    val explosion = assMan.getEnemyExplosion()
+    private val explosion = assMan.getEnemyExplosion()
     override val particlesAmout: Int get() = hp
     override val pPos = GVec2.get()
     override val maxSpeed = Const.enemySpeed
-    override var trackImpulseStrength: Float = maxSpeed / 80f
+    override var trackImpulseStrength: Float = 0.2f
     override val wanderPush: Float = maxSpeed / 2f
     override val wanderPushDelay: Float = 0.2f
     override var hp = 10
@@ -52,11 +57,15 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
     override fun senses(a: GActor) {
         if (a is Player)
             target = a
+        if (a is Bullet)
+            stuffToAvoid.add(a)
         super.senses(a)
     }
     override fun stopSenses(a: GActor) {
         if (a is Player)
             target = null
+        if (a is Bullet)
+            stuffToAvoid.removeValue(a, true)
         super.senses(a)
     }
 

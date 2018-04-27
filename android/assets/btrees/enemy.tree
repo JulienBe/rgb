@@ -4,8 +4,10 @@
 
 import track:"hacknslash.rgb.general.behaviors.GTrackTask"
 import wander:"hacknslash.rgb.general.behaviors.GWanderTask"
+import avoid:"hacknslash.rgb.general.behaviors.GAvoidTask"
 
 root
     selector
+        avoid
         track
         wander
