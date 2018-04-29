@@ -3,14 +3,12 @@ package hacknslash.rgb.specific
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.GAssMan
+import hacknslash.rgb.general.GDataHeartBeat
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GAvoider
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
-import hacknslash.rgb.general.gameobjects.GActor
-import hacknslash.rgb.general.gameobjects.GHitter
-import hacknslash.rgb.general.gameobjects.GMover
-import hacknslash.rgb.general.gameobjects.GSensor
+import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
@@ -24,12 +22,14 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GTracker,
         GAvoider,
         GWanderer,
+        GHeartBeat,
         GObjectParticleEmitter {
 
+    override val dataHB: GDataHeartBeat = GDataHeartBeat()
     override var stuffToAvoid: GArr<GActor> = GArr()
     override var avoidImpulseStrenght: Float = 1f
-    override val r: Float = 1f
-    override val g: Float = 0f
+    override var r: Float = 1f
+    override var g: Float = 0f
     override val b: Float = 0f
     private val explosion = assMan.getEnemyExplosion()
     override val particlesAmout: Int get() = hp
@@ -43,6 +43,12 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
     override var bTree: BehaviorTree<GAiBTree> = initTree("enemy")
     override var target: GActor? = null
     override var prevRotation: GSide = GSide.RIGHT
+
+    override fun beat(delta: Float) {
+        super.beat(delta)
+        r = dataHB.currentHB
+        g = r / 2f
+    }
 
     override fun ttl(): Int {
         return hp * 10

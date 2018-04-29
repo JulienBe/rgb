@@ -17,6 +17,7 @@ interface GObjectParticleEmitter {
 
     fun emit(bundle: GActBundle) {
         this as GActor
-        bundle.particles.add(GObjectParticle.get(this, bundle.assMan))
+        for (i in 0..particlesAmout)
+            bundle.particles.add(GObjectParticle.get(this, bundle.assMan))
     }
 }

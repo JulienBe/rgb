@@ -45,6 +45,7 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
         if (this is GDrawable)              draw(bundle.batch)
         if (this is GAiBTree)               step()
         if (this is GObjectParticleEmitter) emit(bundle)
+        if (this is GHeartBeat)             beat(bundle.delta)
         return dead
     }
 

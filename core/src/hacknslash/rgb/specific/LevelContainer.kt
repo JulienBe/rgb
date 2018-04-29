@@ -68,6 +68,10 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
         }
         crowdControl()
         batch.end()
+//        debug()
+    }
+
+    private fun debug() {
         shapeRenderer.projectionMatrix = cam.combined
         shapeRenderer.begin()
         actors.forEach {
@@ -75,7 +79,7 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
         }
         shapeRenderer.line(player.cx, player.cy, player.cx + player.speedX, player.cy + player.speedY)
         shapeRenderer.end()
-//        physic.debug(cam)
+        physic.debug(cam)
     }
 
     private fun crowdControl() {

@@ -23,14 +23,14 @@ class GObjectParticle internal constructor() : GParticle() {
     }
 
     override fun draw(batch: SpriteBatch): Boolean {
-        color = (width / initWidth) * 0.98f
+        color *= 0.95f
         batch.setColor(r * color, g * color, b * color, 1f)
         batch.draw(texture, x, y, width, width)
         offset = (width - ((width * 0.94f))) / 2f
+        dirX *= 0.8f
+        dirY *= 0.8f
         x += offset + dirX
         y += offset + dirY
-        dirX *= 0.97f
-        dirY *= 0.97f
         width *= 0.94f
         return ttl-- < 0
     }
@@ -48,19 +48,20 @@ class GObjectParticle internal constructor() : GParticle() {
             p.width = width
             p.initWidth = width
             p.texture = assMan.square()
-            p.dirX = GRand.gauss(0.1f)
-            p.dirY = GRand.gauss(0.1f)
+            p.dirX = GRand.gauss(0.2f)
+            p.dirY = GRand.gauss(0.2f)
             p.r = r
             p.g = g
             p.b = b
+            p.color = 1f
             return p
         }
 
         fun get(a: GActor, assMan: GAssMan): GObjectParticle {
             a as GObjectParticleEmitter
             return get(
-                    a.x + GRand.gauss(0.2f * a.dim.width),
-                    a.y + GRand.gauss(0.2f * a.dim.width),
+                    a.x + GRand.gauss(0.1f * a.dim.width),
+                    a.y + GRand.gauss(0.1f * a.dim.width),
                     a.dim.width,
                     a.ttl(),
                     a.r,
