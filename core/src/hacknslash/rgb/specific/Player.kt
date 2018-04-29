@@ -2,13 +2,10 @@ package hacknslash.rgb.specific
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import hacknslash.rgb.general.GActBundle
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.GInput
-import hacknslash.rgb.general.GRand
+import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.*
-import hacknslash.rgb.general.particles.GObjectParticle
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
@@ -20,10 +17,7 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic) :
         GShooter,
         GObjectParticleEmitter {
 
-    override val particlesAmout: Int = 4
-    override val r: Float = 1f
-    override val g: Float = 1f
-    override val b: Float = 1f
+    override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(4, 1f, 1f, 1f)
     override val shotPatterns: Array<GShotPattern> = arrayOf(ShotPatterns.basic)
     override val maxSpeed = Const.playerSpeed
     override val pPos = GVec2.get()

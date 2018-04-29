@@ -60,8 +60,8 @@ class GObjectParticle internal constructor() : GParticle() {
         fun get(a: GActor, assMan: GAssMan): GObjectParticle {
             a as GObjectParticleEmitter
             return get(
-                    a.x + GRand.gauss(0.1f * a.dim.width),
-                    a.y + GRand.gauss(0.1f * a.dim.width),
+                    a.x + GRand.gauss(a.offsetAmplitude),
+                    a.y + GRand.gauss(a.offsetAmplitude),
                     a.dim.width,
                     a.ttl(),
                     a.r,

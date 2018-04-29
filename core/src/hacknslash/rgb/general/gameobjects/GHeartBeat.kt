@@ -1,6 +1,6 @@
 package hacknslash.rgb.general.gameobjects
 
-import hacknslash.rgb.general.GDataHeartBeat
+import hacknslash.rgb.general.datas.GDataHeartBeat
 
 interface GHeartBeat {
     

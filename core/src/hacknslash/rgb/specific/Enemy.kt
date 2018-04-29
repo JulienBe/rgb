@@ -3,11 +3,12 @@ package hacknslash.rgb.specific
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.GAssMan
-import hacknslash.rgb.general.GDataHeartBeat
+import hacknslash.rgb.general.datas.GDataHeartBeat
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GAvoider
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
+import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GPhysic
@@ -25,14 +26,11 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GHeartBeat,
         GObjectParticleEmitter {
 
-    override val dataHB: GDataHeartBeat = GDataHeartBeat()
+    override val dataHB: GDataHeartBeat = GDataHeartBeat(0.5f, 0.05f, 0.8f, 0.98f, true, 0.1f)
+    override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
     override var stuffToAvoid: GArr<GActor> = GArr()
     override var avoidImpulseStrenght: Float = 1f
-    override var r: Float = 1f
-    override var g: Float = 0f
-    override val b: Float = 0f
     private val explosion = assMan.getEnemyExplosion()
-    override val particlesAmout: Int get() = hp
     override val pPos = GVec2.get()
     override val maxSpeed = Const.enemySpeed
     override var trackImpulseStrength: Float = 0.2f
@@ -47,11 +45,12 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
     override fun beat(delta: Float) {
         super.beat(delta)
         r = dataHB.currentHB
-        g = r / 2f
+        g = r / 4f
+        offsetAmplitude = (dataHB.currentHB * 4f) * (dim.width / 10f)
     }
 
     override fun ttl(): Int {
-        return hp * 10
+        return (10 * dataHB.currentHB).toInt()
     }
 
     override fun collide(other: GActor) {

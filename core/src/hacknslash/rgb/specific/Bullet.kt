@@ -1,7 +1,7 @@
 package hacknslash.rgb.specific
 
 import hacknslash.rgb.general.GAssMan
-import hacknslash.rgb.general.GRand
+import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GDim
@@ -15,10 +15,7 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
         GHitter,
         GObjectParticleEmitter {
 
-    override val particlesAmout: Int = 8
-    override val r: Float = 1f
-    override val g: Float = 1f
-    override val b: Float = 1f
+    override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(8, 1f, 1f, 1f)
     override val pPos = GVec2.get()
     override val maxSpeed = Const.bulletSpeed
     override var ttl: Float = 3f
