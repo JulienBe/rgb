@@ -12,6 +12,7 @@ open class GScreen(val game: Game, val batch: SpriteBatch, width: Float, height:
 
     val cam = OrthographicCamera(width, height)
     val fpsLogger = FPSLogger()
+    val bloom = GBloom()
 
     override fun hide() {
     }

@@ -55,6 +55,7 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
         physic.act(delta)
         super.render(delta)
 
+        bloom.capture()
         batch.begin()
         particles.forEach {
             if (it.draw(batch))
@@ -68,6 +69,7 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
         }
         crowdControl()
         batch.end()
+        bloom.render()
 //        debug()
     }
 

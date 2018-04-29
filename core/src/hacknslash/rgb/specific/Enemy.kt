@@ -26,7 +26,7 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GHeartBeat,
         GObjectParticleEmitter {
 
-    override val dataHB: GDataHeartBeat = GDataHeartBeat(0.5f, 0.05f, 0.8f, 0.98f, true, 0.1f)
+    override val dataHB: GDataHeartBeat = GDataHeartBeat(0.5f, 0.05f, 0.75f, 0.98f, true, 0.1f)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
     override var stuffToAvoid: GArr<GActor> = GArr()
     override var avoidImpulseStrenght: Float = 1f
@@ -46,16 +46,18 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         super.beat(delta)
         r = dataHB.currentHB
         g = r / 4f
-        offsetAmplitude = (dataHB.currentHB * 4f) * (dim.width / 10f)
+        offsetAmplitude = ((dataHB.currentHB - dataHB.minHB) * 2f)
     }
+
 
     override fun ttl(): Int {
         return (10 * dataHB.currentHB).toInt()
     }
 
     override fun collide(other: GActor) {
-        if (other is GHitter)
+        if (other is GHitter) {
             hp -= other.strength
+        }
         super.collide(other)
     }
 
