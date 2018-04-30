@@ -6,10 +6,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
 import hacknslash.rgb.general.GActBundle
 import hacknslash.rgb.general.behaviors.GAiBTree
+import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
+import hacknslash.rgb.general.particles.GParticle
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
+import kotlin.reflect.KFunction1
 
 open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val isA: Short, val collidesWith: Short) {
     private lateinit var box2DBody: Body
@@ -49,16 +52,16 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
         return dead
     }
 
-    open fun dead() {
+    open fun dead(particleContainer: GParticlesContainer) {
         remove()
     }
 
-    open fun collide(other: GActor) {
+    open fun collide(other: GActor, particleContainer: GParticlesContainer) {
         if (hp <= 0)
-            dead()
+            dead(particleContainer)
     }
 
-    open fun stopCollide(other: GActor) {
+    open fun stopCollide(other: GActor, particleContainer: GParticlesContainer) {
     }
 
     fun remove() {

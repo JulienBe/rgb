@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2D
 import hacknslash.rgb.general.GAssMan
-import hacknslash.rgb.specific.LevelContainer
+import hacknslash.rgb.specific.containers.LevelContainer
 
 class Rgb : Game() {
 

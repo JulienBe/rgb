@@ -57,6 +57,23 @@ class GObjectParticle internal constructor() : GParticle() {
             return p
         }
 
+        fun get(x: Float, y: Float, other: GObjectParticle): GObjectParticle {
+            val p = GStaticParticlePool.obtain()
+            p.x = x
+            p.y = y
+            p.ttl = other.ttl
+            p.width = other.width
+            p.initWidth = other.initWidth
+            p.texture = other.texture
+            p.dirX = GRand.gauss(0.2f)
+            p.dirY = GRand.gauss(0.2f)
+            p.r = other.r
+            p.g = other.g
+            p.b = other.b
+            p.color = other.color
+            return p
+        }
+
         fun get(a: GActor, assMan: GAssMan): GObjectParticle {
             a as GObjectParticleEmitter
             return get(

@@ -3,13 +3,16 @@ package hacknslash.rgb.specific
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.GAssMan
-import hacknslash.rgb.general.datas.GDataHeartBeat
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GAvoider
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
+import hacknslash.rgb.general.containers.GParticlesContainer
+import hacknslash.rgb.general.datas.GDataHeartBeat
 import hacknslash.rgb.general.datas.GDataObjectParticle
+import hacknslash.rgb.general.datas.GHeartBeatSpeed
 import hacknslash.rgb.general.gameobjects.*
+import hacknslash.rgb.general.particles.GObjectParticle
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
@@ -26,7 +29,7 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GHeartBeat,
         GObjectParticleEmitter {
 
-    override val dataHB: GDataHeartBeat = GDataHeartBeat(0.5f, 0.05f, 0.75f, 0.98f, true, 0.1f)
+    override val dataHB: GDataHeartBeat = GDataHeartBeat(0.7f, 0.98f, GHeartBeatSpeed.MEDIUM)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
     override var stuffToAvoid: GArr<GActor> = GArr()
     override var avoidImpulseStrenght: Float = 1f
@@ -54,11 +57,11 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         return (10 * dataHB.currentHB).toInt()
     }
 
-    override fun collide(other: GActor) {
+    override fun collide(other: GActor, particleContainer: GParticlesContainer) {
         if (other is GHitter) {
             hp -= other.strength
         }
-        super.collide(other)
+        super.collide(other, particleContainer)
     }
 
     override fun senses(a: GActor) {
@@ -76,12 +79,18 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         super.senses(a)
     }
 
-    override fun dead() {
+    override fun dead(particleContainer: GParticlesContainer) {
         count--
         explosion.play()
-        super.dead()
+        val particles = particleContainer.getMine(this)
+        particles?.forEach {p ->
+            p as GObjectParticle
+            p.dirX *= 5f
+            p.dirY *= 5f
+            p.ttl *= 2
+        }
+        super.dead(particleContainer)
     }
-
 
     companion object {
         var count = 0

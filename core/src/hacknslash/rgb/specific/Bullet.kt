@@ -1,12 +1,15 @@
 package hacknslash.rgb.specific
 
 import hacknslash.rgb.general.GAssMan
+import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
+import hacknslash.rgb.general.particles.GParticle
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
+import kotlin.reflect.KFunction1
 
 class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic, assMan: GAssMan) :
         GActor(dim, initPos, physic, CollisionBits.bullet, CollisionBits.bulletCollisions),
@@ -30,10 +33,10 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
         return 4
     }
 
-    override fun collide(other: GActor) {
+    override fun collide(other: GActor, particleContainer: GParticlesContainer) {
         if (other is Enemy)
             ttlExpired()
-        super.collide(other)
+        super.collide(other, particleContainer)
     }
 
     companion object {

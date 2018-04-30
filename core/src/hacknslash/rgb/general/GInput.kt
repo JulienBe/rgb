@@ -1,10 +1,7 @@
 package hacknslash.rgb.general
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Screen
-import hacknslash.rgb.Rgb
-import hacknslash.rgb.specific.LevelContainer
-import java.util.logging.Level
+import hacknslash.rgb.specific.containers.LevelContainer
 
 class GInput {
 

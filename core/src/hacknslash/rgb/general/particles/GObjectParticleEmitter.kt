@@ -4,8 +4,9 @@ import hacknslash.rgb.general.GActBundle
 import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.GActor
+import hacknslash.rgb.general.gameobjects.GParticleEmitter
 
-interface GObjectParticleEmitter {
+interface GObjectParticleEmitter: GParticleEmitter {
 
     val dataObjectPartEmitter: GDataObjectParticle
     var r: Float get() = dataObjectPartEmitter.r
@@ -22,9 +23,10 @@ interface GObjectParticleEmitter {
         return 20 + GRand.gauss(3)
     }
 
-    fun emit(bundle: GActBundle) {
-        this as GActor
+    override fun emit(bundle: GActBundle) {
         for (i in 0..dataObjectPartEmitter.particlesAmout)
-            bundle.particles.add(GObjectParticle.get(this, bundle.assMan))
+            bundle.particles.add(this, getObjectParticle(bundle))
     }
+
+    fun getObjectParticle(bundle: GActBundle) = GObjectParticle.get(this as GActor, bundle.assMan)
 }
