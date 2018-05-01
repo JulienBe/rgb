@@ -9,7 +9,7 @@ interface GAiBTree {
 
     fun initTree(treeName: String): BehaviorTree<GAiBTree> {
         val reader = Gdx.files.internal("btrees/$treeName.tree").reader()
-        val parser = BehaviorTreeParser<GAiBTree>(BehaviorTreeParser.DEBUG_LOW)
+        val parser = BehaviorTreeParser<GAiBTree>(BehaviorTreeParser.DEBUG_NONE)
         return parser.parse(reader, this)
     }
 

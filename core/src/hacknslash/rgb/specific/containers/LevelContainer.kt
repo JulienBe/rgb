@@ -21,7 +21,7 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
     val actors = GArr<GActor>()
     val deadActors = GArr<GActor>()
     val bundle = GActBundle(physic, assMan, this, spriteBatch, actors, 0f, particlesContainer)
-    var enemiesNumber = 4
+    var enemiesNumber = 40
     val map = GLevelLoader.load("one", physic, assMan)
     val shapeRenderer = ShapeRenderer()
 
@@ -45,10 +45,9 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
 
         physic.removeAll(deadActors)
         actors.removeAll(deadActors)
-
         deadActors.clear()
         GClock.act(delta)
-        cam.position.set(player.cx, player.cy, GClock.time)
+//        cam.position.set(player.cx, player.cy, GClock.time)
         physic.act(delta)
         super.render(delta)
 

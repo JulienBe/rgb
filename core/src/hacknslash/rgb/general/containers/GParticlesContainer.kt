@@ -11,16 +11,24 @@ class GParticlesContainer {
     private val free = gdxSetOf<GParticle>()
 
     fun draw(batch: SpriteBatch) {
+        var nbParticles = 0
         tracked.forEach { map ->
             map.value.removeAll(
-                    map.value.filter {
+                    map.value.filter({
                         it.draw(batch)
-                    })
+                    }).onEach {
+                        it.free()
+                    }
+            )
+            nbParticles += map.value.size
         }
         free.forEach {
-            if (it.draw(batch))
+            if (it.draw(batch)) {
+                it.free()
                 free.remove(it)
+            }
         }
+        nbParticles += free.size
     }
 
     fun add(actor: GParticleEmitter, p: GParticle) {
