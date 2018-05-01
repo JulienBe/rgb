@@ -15,7 +15,7 @@ class Wall(dim: GDim, initPos: GVec2, physic: GPhysic, assMan: GAssMan) :
         GDrawable,
         GStatic {
 
-    override val img: TextureRegion = assMan.square()
+    override val img: TextureRegion = assMan.getTexture("Wall")
 
     companion object {
         const val ratio = 1f / 16f

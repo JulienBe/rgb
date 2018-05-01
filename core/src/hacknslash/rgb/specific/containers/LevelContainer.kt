@@ -32,7 +32,7 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
         }
     }
 
-    private fun spawnEnemy(assMan: GAssMan) {
+    private fun spawnEnemy() {
         actors.add(Enemy.get(
                 GRand.withinButNot(map.lowX, map.highX - Enemy.dim.width, player.cx - 10f, player.cx + 10f),
                 GRand.withinButNot(map.lowY, map.highY - Enemy.dim.height, player.cy - 10f, player.cy + 10f),
@@ -80,7 +80,7 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
 
     private fun crowdControl() {
         if (enemiesNumber > Enemy.count) {
-            spawnEnemy(assMan)
+            spawnEnemy()
             if (GRand.nextFloat() > 0.8f)
                 enemiesNumber++
         }

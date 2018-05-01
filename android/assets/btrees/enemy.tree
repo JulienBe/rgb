@@ -8,6 +8,6 @@ import avoid:"hacknslash.rgb.general.behaviors.GAvoidTask"
 
 root
     selector
-        avoid
+#        avoid
         track
         wander

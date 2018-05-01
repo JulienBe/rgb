@@ -47,7 +47,7 @@ class GObjectParticle internal constructor() : GParticle() {
             p.ttl = ttl
             p.width = width
             p.initWidth = width
-            p.texture = assMan.square()
+            p.texture = assMan.getTexture("GObjectParticle")
             p.dirX = GRand.gauss(0.2f)
             p.dirY = GRand.gauss(0.2f)
             p.r = r

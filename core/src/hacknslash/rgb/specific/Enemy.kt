@@ -29,11 +29,11 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GHeartBeat,
         GObjectParticleEmitter {
 
+    private val explosion = assMan.getSound("Enemy")
     override val dataHB: GDataHeartBeat = GDataHeartBeat(0.7f, 0.98f, GHeartBeatSpeed.MEDIUM)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
     override var stuffToAvoid: GArr<GActor> = GArr()
     override var avoidImpulseStrenght: Float = 1f
-    private val explosion = assMan.getEnemyExplosion()
     override val pPos = GVec2.get()
     override val maxSpeed = Const.enemySpeed
     override var trackImpulseStrength: Float = 0.2f
