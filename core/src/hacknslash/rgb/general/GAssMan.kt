@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import ktx.collections.gdxMapOf
@@ -15,14 +16,18 @@ open class GAssMan(val pack: String = "atlas.pack") : AssetManager(), AssetError
     private val trMapping = gdxMapOf(
             "GObjectParticle"   to "whitesqure",
             "Wall"              to "whitesqure",
-            "GObjectParticle"   to "whitesqure"
+            "Enemy"             to "whitesqure"
     )
     private val soundMapping = gdxMapOf(
             "explosionenemy"    to "explosionenemy",
             "Enemy"             to "explosionenemy"
     )
+    private val animationMapping = gdxMapOf(
+            "Enemy"            to   Triple(0.33f, "starradiance", Animation.PlayMode.LOOP_PINGPONG)
+    )
     private val sounds = gdxMapOf<String, Sound>()
     private val textures = gdxMapOf<String, TextureRegion>()
+    private val animations = gdxMapOf<String, Animation<TextureRegion>>()
 
     init {
         setErrorListener(this)
@@ -41,19 +46,27 @@ open class GAssMan(val pack: String = "atlas.pack") : AssetManager(), AssetError
         return getTextureRegion(trMapping[name])
     }
 
-    protected fun getTextureRegion(name: String): TextureRegion {
+    private fun getTextureRegion(name: String): TextureRegion {
         if (!textures.containsKey(name))
             textures.put(name, get(pack, TextureAtlas::class.java).findRegion(name))
         return textures[name]
     }
 
     fun getSound(name: String): Sound {
-        return getMappedSound(soundMapping[name])
+        return getActualSound(soundMapping[name])
     }
 
-    protected fun getMappedSound(name: String): Sound {
+    private fun getActualSound(name: String): Sound {
         if (!sounds.containsKey(name))
             sounds.put(name, Gdx.audio.newSound(Gdx.files.internal("sounds/$name.wav")))
         return sounds[name]
+    }
+
+    fun getAnimation(name: String): Animation<TextureRegion> {
+        if (!animations.containsKey(name)) {
+            val entry = animationMapping[name]
+            animations.put(name, Animation(entry.first, get(pack, TextureAtlas::class.java).findRegions(entry.second), entry.third))
+        }
+        return animations[name]
     }
 }

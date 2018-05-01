@@ -1,6 +1,10 @@
 package hacknslash.rgb.specific
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GAvoider
@@ -26,10 +30,12 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GTracker,
         GAvoider,
         GWanderer,
+        GAnimated,
         GHeartBeat,
         GObjectParticleEmitter {
 
     private val explosion = assMan.getSound("Enemy")
+    override val anim: Animation<TextureRegion> = assMan.getAnimation("Enemy")
     override val dataHB: GDataHeartBeat = GDataHeartBeat(0.7f, 0.98f, GHeartBeatSpeed.MEDIUM)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
     override var stuffToAvoid = gdxArrayOf<GActor>()
@@ -52,6 +58,11 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         offsetAmplitude = ((dataHB.currentHB - dataHB.minHB) * 2f)
     }
 
+    override fun animate(batch: SpriteBatch) {
+        batch.setColor(1f, g, b, 1f)
+        super.animate(batch)
+        batch.color = Color.WHITE
+    }
 
     override fun ttl(): Int {
         return (10 * dataHB.currentHB).toInt()

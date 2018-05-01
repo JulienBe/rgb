@@ -8,11 +8,9 @@ import hacknslash.rgb.general.GActBundle
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
-import hacknslash.rgb.general.particles.GParticle
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
-import kotlin.reflect.KFunction1
 
 open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val isA: Short, val collidesWith: Short) {
     private lateinit var box2DBody: Body
@@ -49,6 +47,7 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
         if (this is GAiBTree)               step()
         if (this is GObjectParticleEmitter) emit(bundle)
         if (this is GHeartBeat)             beat(bundle.delta)
+        if (this is GAnimated)              animate(bundle.batch)
         return dead
     }
 
