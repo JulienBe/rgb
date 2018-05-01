@@ -4,7 +4,7 @@ import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.GClock
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
-import hacknslash.rgb.specific.Bullet
+import hacknslash.rgb.specific.actors.Bullet
 import kotlin.reflect.KClass
 
 class GShotPattern(val cd: Float, val offsetAngle: Float, val weapon: KClass<Bullet>) {

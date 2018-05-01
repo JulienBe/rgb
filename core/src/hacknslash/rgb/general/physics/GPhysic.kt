@@ -3,6 +3,7 @@ package hacknslash.rgb.general.physics
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GControllable
@@ -17,8 +18,8 @@ class GPhysic(particleContainer: GParticlesContainer) {
     val world = World(Vector2(0f, 0f), true)
     var accumulator = 0f
 
-    init {
-        world.setContactListener(GContactListener(particleContainer))
+    fun setup(bundle: GActBundle) {
+        world.setContactListener(GContactListener(bundle))
     }
 
     fun act(delta: Float) {
@@ -86,7 +87,7 @@ class GPhysic(particleContainer: GParticlesContainer) {
         val positionIterations = 2
     }
 
-    class GContactListener(private val particleContainer: GParticlesContainer) : ContactListener {
+    class GContactListener(private val bundle: GActBundle) : ContactListener {
         override fun preSolve(contact: Contact?, oldManifold: Manifold?) {}
         override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {}
 
@@ -98,7 +99,7 @@ class GPhysic(particleContainer: GParticlesContainer) {
             check(contact, GActor::collide, GSensor::senses)
         }
 
-        private fun check(contact: Contact?, collision: KFunction3<GActor, @ParameterName(name = "other") GActor, GParticlesContainer, Unit>, sens: KFunction2<GSensor, @ParameterName(name = "a") GActor, Unit>) {
+        private fun check(contact: Contact?, collision: KFunction3<GActor, @ParameterName(name = "other") GActor, GActBundle, Unit>, sens: KFunction2<GSensor, @ParameterName(name = "a") GActor, Unit>) {
             contact!!
             val fixA = contact.fixtureA
             val fixB = contact.fixtureB
@@ -108,8 +109,8 @@ class GPhysic(particleContainer: GParticlesContainer) {
             actorB as GActor
 
             if (!fixA.isSensor && !fixB.isSensor) {
-                collision(actorA, actorB, particleContainer)
-                collision(actorB, actorA, particleContainer)
+                collision(actorA, actorB, bundle)
+                collision(actorB, actorA, bundle)
             } else if (!(fixA.isSensor && fixB.isSensor)) {
                 if (contact.fixtureA.isSensor)
                     sens((actorA as GSensor), actorB)

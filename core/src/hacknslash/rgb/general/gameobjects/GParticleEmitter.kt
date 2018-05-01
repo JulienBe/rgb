@@ -1,6 +1,6 @@
 package hacknslash.rgb.general.gameobjects
 
-import hacknslash.rgb.general.GActBundle
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.particles.GParticle
 
 interface GParticleEmitter {

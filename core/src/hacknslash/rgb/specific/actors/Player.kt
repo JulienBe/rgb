@@ -1,4 +1,4 @@
-package hacknslash.rgb.specific
+package hacknslash.rgb.specific.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -9,8 +9,12 @@ import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.general.physics.GPhysic
+import hacknslash.rgb.specific.CollisionBits
+import hacknslash.rgb.specific.Const
+import hacknslash.rgb.specific.ShotPatterns
+import ktx.collections.gdxArrayOf
 
-class Player private constructor(assMan: GAssMan, physic: GPhysic) :
+class Player private constructor(physic: GPhysic) :
         GActor(Const.playerDim, GVec2.get(), physic, CollisionBits.player, CollisionBits.playerCollisions),
         GMover,
         GControllable,
@@ -18,13 +22,15 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic) :
         GObjectParticleEmitter {
 
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(4, 1f, 1f, 1f)
-    override val shotPatterns: Array<GShotPattern> = arrayOf(ShotPatterns.basic)
+    override val shotPatterns = gdxArrayOf(ShotPatterns.basic)
     override val maxSpeed = Const.playerSpeed
     override val pPos = GVec2.get()
     override val input: GInput = GInput()
     override val shouldShoot: Boolean get() = Gdx.input.isTouched
     override val shotDir: GVec2
         get() = GVec2.get((GInput.x() - Bullet.dim.hw) - GInput.centerW(), (GInput.y() - Bullet.dim.hh) - GInput.centerH())
+
+    var level = 1
 
     init {
         keyPressed(Input.Keys.UP,    {addVelocity(0f, Const.playerImpulse)})
@@ -38,9 +44,20 @@ class Player private constructor(assMan: GAssMan, physic: GPhysic) :
         super.move(delta)
     }
 
+    fun powerup() {
+        level++
+        val basePattern = shotPatterns.get(0)
+        shotPatterns.add(
+                GShotPattern(
+                        basePattern.cd * level,
+                        basePattern.offsetAngle + (if (level % 2 == 0) -level * 4 else level * 4),
+                        basePattern.weapon)
+        )
+    }
+
     companion object {
         fun get(assMan: GAssMan, physic: GPhysic): Player {
-            return Player(assMan, physic)
+            return Player(physic)
         }
     }
 }

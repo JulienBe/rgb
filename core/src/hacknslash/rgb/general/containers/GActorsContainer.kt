@@ -1,7 +1,7 @@
 package hacknslash.rgb.general.containers
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import hacknslash.rgb.general.GActBundle
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.physics.GPhysic
 import ktx.collections.gdxArrayOf

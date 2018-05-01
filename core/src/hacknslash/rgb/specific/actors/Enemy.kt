@@ -1,4 +1,4 @@
-package hacknslash.rgb.specific
+package hacknslash.rgb.specific.actors
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.graphics.Color
@@ -10,7 +10,7 @@ import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GAvoider
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
-import hacknslash.rgb.general.containers.GParticlesContainer
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.datas.GDataHeartBeat
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.datas.GHeartBeatSpeed
@@ -20,6 +20,8 @@ import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
 import hacknslash.rgb.general.physics.GVec2
+import hacknslash.rgb.specific.CollisionBits
+import hacknslash.rgb.specific.Const
 import ktx.collections.gdxArrayOf
 
 class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPhysic) :
@@ -68,11 +70,11 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         return (10 * dataHB.currentHB).toInt()
     }
 
-    override fun collide(other: GActor, particleContainer: GParticlesContainer) {
+    override fun collide(other: GActor, bundle: GActBundle) {
         if (other is GHitter) {
             hp -= other.strength
         }
-        super.collide(other, particleContainer)
+        super.collide(other, bundle)
     }
 
     override fun senses(a: GActor) {
@@ -90,17 +92,18 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         super.senses(a)
     }
 
-    override fun dead(particleContainer: GParticlesContainer) {
+    override fun dead(bundle: GActBundle) {
         count--
         explosion.play()
-        val particles = particleContainer.getMine(this)
+        val particles = bundle.particles.getMine(this)
         particles?.forEach {p ->
             p as GObjectParticle
             p.dirX *= 5f
             p.dirY *= 5f
             p.ttl *= 2
         }
-        super.dead(particleContainer)
+        bundle.actors.add(PowerUp.get(GVec2.get(cx, cy), bundle))
+        super.dead(bundle)
     }
 
     companion object {

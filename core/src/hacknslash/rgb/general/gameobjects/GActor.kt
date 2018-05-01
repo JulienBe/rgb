@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
-import hacknslash.rgb.general.GActBundle
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
@@ -51,16 +51,16 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
         return dead
     }
 
-    open fun dead(particleContainer: GParticlesContainer) {
+    open fun dead(bundle: GActBundle) {
         remove()
     }
 
-    open fun collide(other: GActor, particleContainer: GParticlesContainer) {
-        if (hp <= 0)
-            dead(particleContainer)
+    open fun collide(other: GActor, bundle: GActBundle) {
+        if (hp <= 0 && !dead)
+            dead(bundle)
     }
 
-    open fun stopCollide(other: GActor, particleContainer: GParticlesContainer) {
+    open fun stopCollide(other: GActor, bundle: GActBundle) {
     }
 
     fun remove() {

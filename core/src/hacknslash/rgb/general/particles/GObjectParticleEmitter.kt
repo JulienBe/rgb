@@ -1,6 +1,6 @@
 package hacknslash.rgb.general.particles
 
-import hacknslash.rgb.general.GActBundle
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.GActor

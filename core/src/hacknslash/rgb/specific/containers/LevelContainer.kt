@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import hacknslash.rgb.general.*
 import hacknslash.rgb.general.GAssMan
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.containers.GActorsContainer
 import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.graphics.GScreen
 import hacknslash.rgb.general.physics.GPhysic
-import hacknslash.rgb.specific.Enemy
-import hacknslash.rgb.specific.Player
+import hacknslash.rgb.specific.actors.Enemy
+import hacknslash.rgb.specific.actors.Player
 
 
 class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: SpriteBatch) : GScreen(game, spriteBatch, width, height), InputHandler {
@@ -19,16 +20,17 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
     val physic = GPhysic(particlesContainer)
     val actorsContainer= GActorsContainer(physic)
     val player = Player.get(assMan, physic)
-    val bundle = GActBundle(physic, assMan, this, spriteBatch, actorsContainer, 0f, particlesContainer)
-    var enemiesNumber = 40
+    var enemiesNumber = 5
     val map = GLevelLoader.load("one", physic, assMan)
     val shapeRenderer = ShapeRenderer()
+    val bundle = GActBundle(physic, assMan, this, spriteBatch, actorsContainer, 0f, particlesContainer)
 
     init {
         shapeRenderer.setAutoShapeType(true)
         map.walls.forEach {
             actorsContainer.add(it)
         }
+        physic.setup(bundle)
     }
 
     private fun spawnEnemy() {

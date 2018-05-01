@@ -1,7 +1,7 @@
-package hacknslash.rgb.specific
+package hacknslash.rgb.specific.actors
 
 import hacknslash.rgb.general.GAssMan
-import hacknslash.rgb.general.containers.GParticlesContainer
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GHitter
@@ -11,6 +11,8 @@ import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
+import hacknslash.rgb.specific.CollisionBits
+import hacknslash.rgb.specific.Const
 
 class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic, assMan: GAssMan) :
         GActor(dim, initPos, physic, CollisionBits.bullet, CollisionBits.bulletCollisions),
@@ -19,7 +21,7 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
         GHitter,
         GObjectParticleEmitter {
 
-    override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(8, 1f, 1f, 1f)
+    override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(8, 1f, 0.8f, 0.8f)
     override val pPos = GVec2.get()
     override val maxSpeed = Const.bulletSpeed
     override var ttl: Float = 3f
@@ -34,10 +36,10 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2, physic: GPhysic
         return 4
     }
 
-    override fun collide(other: GActor, particleContainer: GParticlesContainer) {
+    override fun collide(other: GActor, bundle: GActBundle) {
         if (other is Enemy)
             ttlExpired()
-        super.collide(other, particleContainer)
+        super.collide(other, bundle)
     }
 
     companion object {
