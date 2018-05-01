@@ -1,7 +1,6 @@
 package hacknslash.rgb.specific
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
-import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GAvoider
@@ -17,6 +16,7 @@ import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
 import hacknslash.rgb.general.physics.GVec2
+import ktx.collections.gdxArrayOf
 
 class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPhysic) :
         GActor(Const.enemyDim, GVec2.get(x, y), physic, CollisionBits.enemy, CollisionBits.enemyCollisions),
@@ -32,7 +32,7 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
     private val explosion = assMan.getSound("Enemy")
     override val dataHB: GDataHeartBeat = GDataHeartBeat(0.7f, 0.98f, GHeartBeatSpeed.MEDIUM)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
-    override var stuffToAvoid: GArr<GActor> = GArr()
+    override var stuffToAvoid = gdxArrayOf<GActor>()
     override var avoidImpulseStrenght: Float = 1f
     override val pPos = GVec2.get()
     override val maxSpeed = Const.enemySpeed

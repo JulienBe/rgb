@@ -16,8 +16,8 @@ class GParticlesContainer {
             map.value.removeAll(
                     map.value.filter({
                         it.draw(batch)
-                    }).onEach {
-                        it.free()
+                    }).onEach { deadParticle ->
+                        deadParticle.free()
                     }
             )
             nbParticles += map.value.size

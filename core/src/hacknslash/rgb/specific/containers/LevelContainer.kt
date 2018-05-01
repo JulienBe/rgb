@@ -11,6 +11,7 @@ import hacknslash.rgb.general.graphics.GScreen
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.specific.Enemy
 import hacknslash.rgb.specific.Player
+import ktx.collections.gdxArrayOf
 
 
 class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: SpriteBatch) : GScreen(game, spriteBatch, width, height), InputHandler {
@@ -18,8 +19,8 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
     val particlesContainer = GParticlesContainer()
     val physic = GPhysic(particlesContainer)
     val player = Player.get(assMan, physic)
-    val actors = GArr<GActor>()
-    val deadActors = GArr<GActor>()
+    val actors = gdxArrayOf<GActor>()
+    val deadActors = gdxArrayOf<GActor>()
     val bundle = GActBundle(physic, assMan, this, spriteBatch, actors, 0f, particlesContainer)
     var enemiesNumber = 40
     val map = GLevelLoader.load("one", physic, assMan)
@@ -44,10 +45,10 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
         bundle.delta = delta
 
         physic.removeAll(deadActors)
-        actors.removeAll(deadActors)
+        actors.removeAll(deadActors, true)
         deadActors.clear()
         GClock.act(delta)
-//        cam.position.set(player.cx, player.cy, GClock.time)
+        cam.position.set(player.cx, player.cy, 1f)
         physic.act(delta)
         super.render(delta)
 

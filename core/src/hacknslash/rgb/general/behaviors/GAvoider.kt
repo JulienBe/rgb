@@ -1,14 +1,14 @@
 package hacknslash.rgb.general.behaviors
 
 import com.badlogic.gdx.math.Intersector
-import hacknslash.rgb.general.GArr
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GMover
 import hacknslash.rgb.general.physics.GVec2
+import ktx.collections.GdxArray
 
 interface GAvoider {
 
-    var stuffToAvoid: GArr<GActor>
+    var stuffToAvoid: GdxArray<GActor>
     var avoidImpulseStrenght: Float
 
     fun avoid(it: GActor) {
