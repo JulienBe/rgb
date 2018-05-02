@@ -3,9 +3,7 @@ package hacknslash.rgb.specific.actors
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GAvoider
 import hacknslash.rgb.general.behaviors.GTracker
@@ -17,15 +15,14 @@ import hacknslash.rgb.general.datas.GHeartBeatSpeed
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticle
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
-import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GSide
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.CollisionBits
 import hacknslash.rgb.specific.Const
 import ktx.collections.gdxArrayOf
 
-class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPhysic) :
-        GActor(Const.enemyDim, GVec2.get(x, y), physic, CollisionBits.enemy, CollisionBits.enemyCollisions),
+class Enemy private constructor(x: Float, y: Float) :
+        GActor(Const.enemyDim, GVec2.get(x, y), CollisionBits.enemy, CollisionBits.enemyCollisions),
         GMover,
         GSensor,
         GAiBTree,
@@ -36,8 +33,8 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         GHeartBeat,
         GObjectParticleEmitter {
 
-    private val explosion = assMan.getSound("Enemy")
-    override val anim: Animation<TextureRegion> = assMan.getAnimation("Enemy")
+    private val explosion = GActBundle.bundle.assMan.getSound("Enemy")
+    override val anim: Animation<TextureRegion> = GActBundle.bundle.assMan.getAnimation("Enemy")
     override val dataHB: GDataHeartBeat = GDataHeartBeat(0.7f, 0.98f, GHeartBeatSpeed.MEDIUM)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
     override var stuffToAvoid = gdxArrayOf<GActor>()
@@ -53,28 +50,28 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
     override var target: GActor? = null
     override var prevRotation: GSide = GSide.RIGHT
 
-    override fun beat(delta: Float) {
-        super.beat(delta)
+    override fun beat() {
+        super.beat()
         r = dataHB.currentHB
         g = r / 4f
         offsetAmplitude = ((dataHB.currentHB - dataHB.minHB) * 2f)
     }
 
-    override fun animate(batch: SpriteBatch) {
-        batch.setColor(1f, g, b, 1f)
-        super.animate(batch)
-        batch.color = Color.WHITE
+    override fun animate() {
+        GActBundle.bundle.batch.setColor(1f, g, b, 1f)
+        super.animate()
+        GActBundle.bundle.batch.color = Color.WHITE
     }
 
     override fun ttl(): Int {
         return (10 * dataHB.currentHB).toInt()
     }
 
-    override fun collide(other: GActor, bundle: GActBundle) {
+    override fun collide(other: GActor) {
         if (other is GHitter) {
             hp -= other.strength
         }
-        super.collide(other, bundle)
+        super.collide(other)
     }
 
     override fun senses(a: GActor) {
@@ -92,27 +89,27 @@ class Enemy private constructor(x: Float, y: Float, assMan: GAssMan, physic: GPh
         super.senses(a)
     }
 
-    override fun dead(bundle: GActBundle) {
+    override fun dead() {
         count--
         explosion.play()
-        val particles = bundle.particles.getMine(this)
+        val particles = GActBundle.bundle.particles.getMine(this)
         particles?.forEach {p ->
             p as GObjectParticle
             p.dirX *= 5f
             p.dirY *= 5f
             p.ttl *= 2
         }
-        bundle.actors.add(PowerUp.get(GVec2.get(cx, cy), bundle))
-        super.dead(bundle)
+        GActBundle.bundle.actors.add(PowerUp.get(GVec2.get(cx, cy)))
+        super.dead()
     }
 
     companion object {
         var count = 0
         val dim = Const.enemyDim
 
-        fun get(x: Float, y: Float, assMan: GAssMan, physic: GPhysic): Enemy {
+        fun get(x: Float, y: Float): Enemy {
             count++
-            return Enemy(x, y, assMan, physic)
+            return Enemy(x, y)
         }
     }
 }

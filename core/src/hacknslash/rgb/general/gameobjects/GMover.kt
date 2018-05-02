@@ -9,7 +9,7 @@ interface GMover {
     val maxSpeed : Float
 
     //TODO remove this as
-    fun move(delta: Float) {
+    fun move() {
         this as GActor
         pPos.set(center)
 

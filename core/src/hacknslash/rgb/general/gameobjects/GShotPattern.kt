@@ -1,8 +1,6 @@
 package hacknslash.rgb.general.gameobjects
 
-import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.GClock
-import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.actors.Bullet
 import kotlin.reflect.KClass
@@ -17,7 +15,7 @@ class GShotPattern(val cd: Float, val offsetAngle: Float, val weapon: KClass<Bul
         get() = (nextShot < GClock.time)
 
 
-    fun shoot(shooter: GShooter, assMan: GAssMan, physic: GPhysic): Bullet {
+    fun shoot(shooter: GShooter): Bullet {
         (shooter as GActor)
         nextShot = shotTime()
 
@@ -28,9 +26,7 @@ class GShotPattern(val cd: Float, val offsetAngle: Float, val weapon: KClass<Bul
 
         return Bullet.get(
                 pos,
-                dir,
-                physic,
-                assMan
+                dir
         )
     }
 }

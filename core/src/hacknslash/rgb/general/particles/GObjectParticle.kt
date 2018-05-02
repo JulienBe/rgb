@@ -2,8 +2,8 @@ package hacknslash.rgb.general.particles
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Pool
-import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.GRand
+import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.gameobjects.GActor
 
 class GObjectParticle internal constructor() : GParticle() {
@@ -40,14 +40,14 @@ class GObjectParticle internal constructor() : GParticle() {
     }
 
     companion object {
-        fun get(x: Float, y: Float, width: Float, ttl: Int, r: Float, g: Float, b: Float, assMan: GAssMan): GObjectParticle {
+        fun get(x: Float, y: Float, width: Float, ttl: Int, r: Float, g: Float, b: Float): GObjectParticle {
             val p = GStaticParticlePool.obtain()
             p.x = x
             p.y = y
             p.ttl = ttl
             p.width = width
             p.initWidth = width
-            p.texture = assMan.getTexture("GObjectParticle")
+            p.texture = GActBundle.bundle.assMan.getTexture("GObjectParticle")
             p.dirX = GRand.gauss(0.2f)
             p.dirY = GRand.gauss(0.2f)
             p.r = r
@@ -74,7 +74,7 @@ class GObjectParticle internal constructor() : GParticle() {
             return p
         }
 
-        fun get(a: GActor, assMan: GAssMan): GObjectParticle {
+        fun get(a: GActor): GObjectParticle {
             a as GObjectParticleEmitter
             return get(
                     a.x + GRand.gauss(a.offsetAmplitude),
@@ -83,15 +83,13 @@ class GObjectParticle internal constructor() : GParticle() {
                     a.ttl(),
                     a.r,
                     a.g,
-                    a.b,
-                    assMan)
+                    a.b)
         }
     }
 
 }
 
 private object GStaticParticlePool : Pool<GObjectParticle>() {
-
     override fun newObject(): GObjectParticle {
         return GObjectParticle()
     }

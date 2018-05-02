@@ -6,55 +6,43 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import hacknslash.rgb.general.*
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.bundles.GActBundle
-import hacknslash.rgb.general.containers.GActorsContainer
-import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.graphics.GScreen
-import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.specific.actors.Enemy
-import hacknslash.rgb.specific.actors.Player
 
+class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GScreen(game, spriteBatch, width, height), InputHandler {
 
-class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: SpriteBatch) : GScreen(game, spriteBatch, width, height), InputHandler {
-
-    val particlesContainer = GParticlesContainer()
-    val physic = GPhysic(particlesContainer)
-    val actorsContainer= GActorsContainer(physic)
-    val player = Player.get(assMan, physic)
+    val bundle = GActBundle(assMan, this, spriteBatch)
     var enemiesNumber = 5
-    val map = GLevelLoader.load("one", physic, assMan)
+    val map = GLevelLoader.load("one")
     val shapeRenderer = ShapeRenderer()
-    val bundle = GActBundle(physic, assMan, this, spriteBatch, actorsContainer, 0f, particlesContainer)
 
     init {
         shapeRenderer.setAutoShapeType(true)
         map.walls.forEach {
-            actorsContainer.add(it)
+            bundle.actors.add(it)
         }
-        physic.setup(bundle)
     }
 
     private fun spawnEnemy() {
-        actorsContainer.add(Enemy.get(
-                GRand.withinButNot(map.lowX, map.highX - Enemy.dim.width, player.cx - 10f, player.cx + 10f),
-                GRand.withinButNot(map.lowY, map.highY - Enemy.dim.height, player.cy - 10f, player.cy + 10f),
-                assMan,
-                physic))
+        bundle.actors.add(Enemy.get(
+                GRand.withinButNot(map.lowX, map.highX - Enemy.dim.width, bundle.player.cx - 10f, bundle.player.cx + 10f),
+                GRand.withinButNot(map.lowY, map.highY - Enemy.dim.height, bundle.player.cy - 10f, bundle.player.cy + 10f)))
     }
 
     override fun render(delta: Float) {
-        bundle.delta = delta
+        GActBundle.bundle.delta = delta
 
         GClock.act(delta)
-        cam.position.set(player.cx, player.cy, 1f)
-        physic.act(delta)
+        cam.position.set(bundle.player.cx, bundle.player.cy, 1f)
+        bundle.physic.act(delta)
         super.render(delta)
 
         bloom.capture()
         batch.begin()
-        particlesContainer.act(batch)
+        bundle.particles.act(batch)
         batch.setColor(1f, 1f, 1f, 1f)
-        player.act(bundle)
-        actorsContainer.act(bundle)
+        bundle.player.act()
+        bundle.actors.act()
         crowdControl()
         batch.end()
         bloom.render()
@@ -64,10 +52,10 @@ class LevelContainer(game: Game, private val assMan: GAssMan, spriteBatch: Sprit
     private fun debug() {
         shapeRenderer.projectionMatrix = cam.combined
         shapeRenderer.begin()
-        actorsContainer.debug(shapeRenderer)
-        shapeRenderer.line(player.cx, player.cy, player.cx + player.speedX, player.cy + player.speedY)
+        bundle.actors.debug(shapeRenderer)
+        shapeRenderer.line(bundle.player.cx, bundle.player.cy, bundle.player.cx + bundle.player.speedX, bundle.player.cy + bundle.player.speedY)
         shapeRenderer.end()
-        physic.debug(cam)
+        bundle.physic.debug(cam)
     }
 
     private fun crowdControl() {

@@ -6,17 +6,15 @@ import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
 import hacknslash.rgb.general.bundles.GActBundle
 import hacknslash.rgb.general.behaviors.GAiBTree
-import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GDim
-import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.general.physics.GVec2
 
-open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val isA: Short, val collidesWith: Short) {
+open class GActor(val dim: GDim, val initPos: GVec2, val isA: Short, val collidesWith: Short) {
     private lateinit var box2DBody: Body
     private val body: Body get() {
         if (!::box2DBody.isInitialized)
-            box2DBody = physic.createBody(this)
+            box2DBody = GActBundle.bundle.physic.createBody(this)
         return box2DBody
     }
     val bodyType: BodyDef.BodyType get() = body.type
@@ -38,29 +36,29 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
     val speedX: Float get() = body.linearVelocity.x
     val speedY: Float get() = body.linearVelocity.y
 
-    open fun act(bundle: GActBundle): Boolean {
-        if (this is GControllable)          control(bundle.input)
-        if (this is GShooter)               shoot(bundle.assMan, bundle.physic, bundle.actors)
-        if (this is GMover)                 move(bundle.delta)
-        if (this is GTtl)                   checkTtl(bundle.delta)
-        if (this is GDrawable)              draw(bundle.batch)
+    open fun act(): Boolean {
+        if (this is GControllable)          control()
+        if (this is GShooter)               shoot()
+        if (this is GMover)                 move()
+        if (this is GTtl)                   checkTtl()
+        if (this is GDrawable)              draw()
         if (this is GAiBTree)               step()
-        if (this is GObjectParticleEmitter) emit(bundle)
-        if (this is GHeartBeat)             beat(bundle.delta)
-        if (this is GAnimated)              animate(bundle.batch)
+        if (this is GObjectParticleEmitter) emit()
+        if (this is GHeartBeat)             beat()
+        if (this is GAnimated)              animate()
         return dead
     }
 
-    open fun dead(bundle: GActBundle) {
+    open fun dead() {
         remove()
     }
 
-    open fun collide(other: GActor, bundle: GActBundle) {
+    open fun collide(other: GActor) {
         if (hp <= 0 && !dead)
-            dead(bundle)
+            dead()
     }
 
-    open fun stopCollide(other: GActor, bundle: GActBundle) {
+    open fun stopCollide(other: GActor) {
     }
 
     fun remove() {
@@ -90,5 +88,6 @@ open class GActor(val dim: GDim, val initPos: GVec2, val physic: GPhysic, val is
     fun addVelocity(x: Float, y: Float) {
         body.linearVelocity = body.linearVelocity.add(x, y)
     }
+
 
 }

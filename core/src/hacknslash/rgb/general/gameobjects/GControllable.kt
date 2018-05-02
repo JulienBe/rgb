@@ -1,14 +1,14 @@
 package hacknslash.rgb.general.gameobjects
 
 import hacknslash.rgb.general.GInput
-import hacknslash.rgb.general.InputHandler
+import hacknslash.rgb.general.bundles.GActBundle
 
 interface GControllable {
 
     val input: GInput
 
-    fun control(inputHandler: InputHandler) {
-        input.act(inputHandler)
+    fun control() {
+        input.act(GActBundle.bundle.input)
     }
 
     fun keyUp(key: Int, function: () -> Unit) {

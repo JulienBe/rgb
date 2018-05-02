@@ -23,10 +23,10 @@ interface GObjectParticleEmitter: GParticleEmitter {
         return 20 + GRand.gauss(3)
     }
 
-    override fun emit(bundle: GActBundle) {
+    override fun emit() {
         for (i in 0..dataObjectPartEmitter.particlesAmout)
-            bundle.particles.add(this, getObjectParticle(bundle))
+            GActBundle.bundle.particles.add(this, getObjectParticle())
     }
 
-    fun getObjectParticle(bundle: GActBundle) = GObjectParticle.get(this as GActor, bundle.assMan)
+    fun getObjectParticle() = GObjectParticle.get(this as GActor)
 }

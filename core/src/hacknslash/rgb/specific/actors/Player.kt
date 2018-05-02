@@ -2,20 +2,18 @@ package hacknslash.rgb.specific.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.GInput
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GVec2
-import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.specific.CollisionBits
 import hacknslash.rgb.specific.Const
 import hacknslash.rgb.specific.ShotPatterns
 import ktx.collections.gdxArrayOf
 
-class Player private constructor(physic: GPhysic) :
-        GActor(Const.playerDim, GVec2.get(), physic, CollisionBits.player, CollisionBits.playerCollisions),
+class Player private constructor() :
+        GActor(Const.playerDim, GVec2.get(), CollisionBits.player, CollisionBits.playerCollisions),
         GMover,
         GControllable,
         GShooter,
@@ -39,9 +37,9 @@ class Player private constructor(physic: GPhysic) :
         keyPressed(Input.Keys.RIGHT, {addVelocity(Const.playerImpulse, 0f)})
     }
 
-    override fun move(delta: Float) {
+    override fun move() {
         clampSpeed()
-        super.move(delta)
+        super.move()
     }
 
     fun powerup() {
@@ -56,8 +54,8 @@ class Player private constructor(physic: GPhysic) :
     }
 
     companion object {
-        fun get(assMan: GAssMan, physic: GPhysic): Player {
-            return Player(physic)
+        fun get(): Player {
+            return Player()
         }
     }
 }

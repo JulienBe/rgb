@@ -6,17 +6,17 @@ import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.physics.GPhysic
 import ktx.collections.gdxArrayOf
 
-class GActorsContainer(val physic: GPhysic) {
+class GActorsContainer {
 
     private val actors = gdxArrayOf<GActor>()
     private val deadActors = gdxArrayOf<GActor>()
 
-    fun act(bundle: GActBundle) {
-        physic.removeAll(deadActors)
+    fun act() {
+        GActBundle.bundle.physic.removeAll(deadActors)
         actors.removeAll(deadActors, true)
         deadActors.clear()
         actors.forEach {
-            if (it.act(bundle))
+            if (it.act())
                 deadActors.add(it)
         }
     }
