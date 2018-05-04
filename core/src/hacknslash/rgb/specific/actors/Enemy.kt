@@ -8,7 +8,7 @@ import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GAvoider
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
-import hacknslash.rgb.general.bundles.GActBundle
+import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.datas.GDataHeartBeat
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.datas.GHeartBeatSpeed
@@ -19,6 +19,7 @@ import hacknslash.rgb.general.physics.GSide
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.CollisionBits
 import hacknslash.rgb.specific.Const
+import ktx.collections.GdxArray
 import ktx.collections.gdxArrayOf
 
 class Enemy private constructor(x: Float, y: Float) :
@@ -33,8 +34,8 @@ class Enemy private constructor(x: Float, y: Float) :
         GHeartBeat,
         GObjectParticleEmitter {
 
-    private val explosion = GActBundle.bundle.assMan.getSound("Enemy")
-    override val anim: Animation<TextureRegion> = GActBundle.bundle.assMan.getAnimation("Enemy")
+    private val explosion = GBundle.bundle.assMan.getSound("Enemy")
+    override val anim: Animation<TextureRegion> = GBundle.bundle.assMan.getAnimation("Enemy")
     override val dataHB: GDataHeartBeat = GDataHeartBeat(0.7f, 0.98f, GHeartBeatSpeed.MEDIUM)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
     override var stuffToAvoid = gdxArrayOf<GActor>()
@@ -47,7 +48,7 @@ class Enemy private constructor(x: Float, y: Float) :
     override var hp = 10
     override val sensorRadius = Const.enemySenseRadius
     override var bTree: BehaviorTree<GAiBTree> = initTree("enemy")
-    override var target: GActor? = null
+    override var targets: GdxArray<GActor> = GdxArray()
     override var prevRotation: GSide = GSide.RIGHT
 
     override fun beat() {
@@ -58,9 +59,9 @@ class Enemy private constructor(x: Float, y: Float) :
     }
 
     override fun animate() {
-        GActBundle.bundle.batch.setColor(1f, g, b, 1f)
+        GBundle.bundle.batch.setColor(1f, g, b, 1f)
         super.animate()
-        GActBundle.bundle.batch.color = Color.WHITE
+        GBundle.bundle.batch.color = Color.WHITE
     }
 
     override fun ttl(): Int {
@@ -76,14 +77,15 @@ class Enemy private constructor(x: Float, y: Float) :
 
     override fun senses(a: GActor) {
         if (a is Player)
-            target = a
+            targets.add(a)
         if (a is Bullet)
             stuffToAvoid.add(a)
         super.senses(a)
     }
+
     override fun stopSenses(a: GActor) {
         if (a is Player)
-            target = null
+            targets.removeValue(a, true)
         if (a is Bullet)
             stuffToAvoid.removeValue(a, true)
         super.senses(a)
@@ -92,14 +94,14 @@ class Enemy private constructor(x: Float, y: Float) :
     override fun dead() {
         count--
         explosion.play()
-        val particles = GActBundle.bundle.particles.getMine(this)
+        val particles = GBundle.bundle.particles.getMine(this)
         particles?.forEach {p ->
             p as GObjectParticle
             p.dirX *= 5f
             p.dirY *= 5f
             p.ttl *= 2
         }
-        GActBundle.bundle.actors.add(PowerUp.get(GVec2.get(cx, cy)))
+        GBundle.bundle.actors.add(PowerUp.get(GVec2.get(cx, cy)))
         super.dead()
     }
 

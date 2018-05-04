@@ -3,7 +3,7 @@ package hacknslash.rgb.specific.actors
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import hacknslash.rgb.general.bundles.GActBundle
+import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GAnimated
 import hacknslash.rgb.general.gameobjects.GTtl
@@ -17,7 +17,7 @@ class PowerUp private constructor(initPos: GVec2) :
         GAnimated {
 
     override var ttl: Float = 6f
-    override val anim: Animation<TextureRegion> = GActBundle.bundle.assMan.getAnimation("PowerUp")
+    override val anim: Animation<TextureRegion> = GBundle.bundle.assMan.getAnimation("PowerUp")
 
     override fun collide(other: GActor) {
         if (other is Player) {
@@ -28,9 +28,9 @@ class PowerUp private constructor(initPos: GVec2) :
     }
 
     override fun animate() {
-        GActBundle.bundle.batch.setColor(1f, 0.8f, 8f, 1f)
+        GBundle.bundle.batch.setColor(1f, 0.8f, 8f, 1f)
         super.animate()
-        GActBundle.bundle.batch.color = Color.WHITE
+        GBundle.bundle.batch.color = Color.WHITE
     }
 
     companion object {

@@ -2,7 +2,7 @@ package hacknslash.rgb.specific
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
-import hacknslash.rgb.general.bundles.GActBundle
+import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GDrawable
 import hacknslash.rgb.general.gameobjects.GStatic
@@ -14,7 +14,7 @@ class Wall(dim: GDim, initPos: GVec2) :
         GDrawable,
         GStatic {
 
-    override val img: TextureRegion = GActBundle.bundle.assMan.getTexture("Wall")
+    override val img: TextureRegion = GBundle.bundle.assMan.getTexture("Wall")
 
     companion object {
         const val ratio = 1f / 16f

@@ -3,19 +3,16 @@ package hacknslash.rgb.general.physics
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import hacknslash.rgb.general.gameobjects.GActor
-import hacknslash.rgb.general.gameobjects.GControllable
-import hacknslash.rgb.general.gameobjects.GSensor
-import hacknslash.rgb.general.gameobjects.GStatic
+import hacknslash.rgb.general.gameobjects.*
 import ktx.collections.GdxArray
 import kotlin.reflect.KFunction2
 
-class GPhysic() {
+class GPhysic {
     val debugRenderer = Box2DDebugRenderer()
     val world = World(Vector2(0f, 0f), true)
     var accumulator = 0f
 
-    fun setup() {
+    init {
         world.setContactListener(GContactListener())
     }
 
@@ -63,7 +60,7 @@ class GPhysic() {
     private fun getBodyDef(actor: GActor): BodyDef {
         val bodyDef = BodyDef()
         bodyDef.type = BodyDef.BodyType.DynamicBody
-        if (actor is GControllable)
+        if (actor is GKinematic)
             bodyDef.type = BodyDef.BodyType.KinematicBody
         if (actor is GStatic)
             bodyDef.type = BodyDef.BodyType.StaticBody
@@ -84,7 +81,7 @@ class GPhysic() {
         val positionIterations = 2
     }
 
-    class GContactListener() : ContactListener {
+    class GContactListener : ContactListener {
         override fun preSolve(contact: Contact?, oldManifold: Manifold?) {}
         override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {}
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
-import hacknslash.rgb.general.bundles.GActBundle
+import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GDim
@@ -14,7 +14,7 @@ open class GActor(val dim: GDim, val initPos: GVec2, val isA: Short, val collide
     private lateinit var box2DBody: Body
     private val body: Body get() {
         if (!::box2DBody.isInitialized)
-            box2DBody = GActBundle.bundle.physic.createBody(this)
+            box2DBody = GBundle.bundle.physic.createBody(this)
         return box2DBody
     }
     val bodyType: BodyDef.BodyType get() = body.type

@@ -1,12 +1,12 @@
 package hacknslash.rgb.general.gameobjects
 
-import hacknslash.rgb.general.bundles.GActBundle
+import hacknslash.rgb.general.bundles.GBundle
 
 interface GTtl {
     var ttl: Float
 
     fun checkTtl() {
-        ttl -= GActBundle.bundle.delta
+        ttl -= GBundle.bundle.delta
         if (ttl <= 0)
             ttlExpired()
     }

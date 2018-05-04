@@ -8,7 +8,7 @@ import hacknslash.rgb.general.containers.GParticlesContainer
 import hacknslash.rgb.general.physics.GPhysic
 import hacknslash.rgb.specific.actors.Player
 
-data class GActBundle(
+data class GBundle(
         val assMan: GAssMan,
         val input: InputHandler,
         val batch: SpriteBatch) {
@@ -24,6 +24,6 @@ data class GActBundle(
     }
 
     companion object {
-        lateinit var bundle: GActBundle
+        lateinit var bundle: GBundle
     }
 }

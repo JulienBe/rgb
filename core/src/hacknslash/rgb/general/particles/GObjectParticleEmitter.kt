@@ -1,6 +1,6 @@
 package hacknslash.rgb.general.particles
 
-import hacknslash.rgb.general.bundles.GActBundle
+import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.GActor
@@ -25,7 +25,7 @@ interface GObjectParticleEmitter: GParticleEmitter {
 
     override fun emit() {
         for (i in 0..dataObjectPartEmitter.particlesAmout)
-            GActBundle.bundle.particles.add(this, getObjectParticle())
+            GBundle.bundle.particles.add(this, getObjectParticle())
     }
 
     fun getObjectParticle() = GObjectParticle.get(this as GActor)

@@ -1,0 +1,7 @@
+import track:"hacknslash.rgb.general.behaviors.GTrackTask"
+import wander:"hacknslash.rgb.general.behaviors.GWanderTask"
+
+root
+    selector
+        track
+        wander

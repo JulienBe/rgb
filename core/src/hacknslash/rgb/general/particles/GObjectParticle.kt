@@ -3,7 +3,7 @@ package hacknslash.rgb.general.particles
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Pool
 import hacknslash.rgb.general.GRand
-import hacknslash.rgb.general.bundles.GActBundle
+import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.gameobjects.GActor
 
 class GObjectParticle internal constructor() : GParticle() {
@@ -47,7 +47,7 @@ class GObjectParticle internal constructor() : GParticle() {
             p.ttl = ttl
             p.width = width
             p.initWidth = width
-            p.texture = GActBundle.bundle.assMan.getTexture("GObjectParticle")
+            p.texture = GBundle.bundle.assMan.getTexture("GObjectParticle")
             p.dirX = GRand.gauss(0.2f)
             p.dirY = GRand.gauss(0.2f)
             p.r = r

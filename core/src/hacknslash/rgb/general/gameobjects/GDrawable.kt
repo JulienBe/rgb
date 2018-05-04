@@ -1,7 +1,7 @@
 package hacknslash.rgb.general.gameobjects
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import hacknslash.rgb.general.bundles.GActBundle
+import hacknslash.rgb.general.bundles.GBundle
 
 interface GDrawable {
 
@@ -10,7 +10,7 @@ interface GDrawable {
     //TODO remove this as
     fun draw() {
         (this as GActor)
-        GActBundle.bundle.batch.draw(img, x, y, w, h)
+        GBundle.bundle.batch.draw(img, x, y, w, h)
     }
 
 }

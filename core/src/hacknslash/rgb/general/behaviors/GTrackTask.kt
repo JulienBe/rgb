@@ -2,6 +2,7 @@ package hacknslash.rgb.general.behaviors
 
 import com.badlogic.gdx.ai.btree.LeafTask
 import com.badlogic.gdx.ai.btree.Task
+import ktx.collections.isNotEmpty
 
 class GTrackTask: LeafTask<GTracker>() {
 
@@ -10,7 +11,7 @@ class GTrackTask: LeafTask<GTracker>() {
     }
 
     override fun execute(): Status {
-        `object`.target?.let {
+        `object`.targets.isNotEmpty().let {
             `object`.track()
             return Status.SUCCEEDED
         }
