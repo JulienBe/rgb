@@ -1,6 +1,7 @@
 package hacknslash.rgb.specific.actors
 
 import com.badlogic.gdx.utils.Pool
+import hacknslash.rgb.general.datas.GDataMover
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GHitter
@@ -22,8 +23,7 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2) :
     constructor() : this(GVec2.get(), GVec2.get())
 
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(8, 1f, 0.8f, 0.8f)
-    override val pPos = GVec2.get()
-    override val maxSpeed = Const.bulletSpeed
+    override val dataMover: GDataMover = GDataMover(Const.bulletSpeed)
     override var ttl: Float = 3f
     override val strength: Int = 5
 

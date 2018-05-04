@@ -3,6 +3,7 @@ package hacknslash.rgb.specific.actors
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import hacknslash.rgb.general.GInput
+import hacknslash.rgb.general.datas.GDataMover
 import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
@@ -21,8 +22,7 @@ class Player private constructor() :
 
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(4, 1f, 1f, 1f)
     override val shotPatterns = gdxArrayOf(ShotPatterns.basic)
-    override val maxSpeed = Const.playerSpeed
-    override val pPos = GVec2.get()
+    override val dataMover: GDataMover = GDataMover(Const.playerSpeed)
     override val input: GInput = GInput()
     override val shouldShoot: Boolean get() = Gdx.input.isTouched
     override val shotDir: GVec2

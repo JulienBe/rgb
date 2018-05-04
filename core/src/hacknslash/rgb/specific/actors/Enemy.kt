@@ -9,17 +9,13 @@ import hacknslash.rgb.general.behaviors.GAvoider
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
 import hacknslash.rgb.general.bundles.GBundle
-import hacknslash.rgb.general.datas.GDataHeartBeat
-import hacknslash.rgb.general.datas.GDataObjectParticle
-import hacknslash.rgb.general.datas.GHeartBeatSpeed
+import hacknslash.rgb.general.datas.*
 import hacknslash.rgb.general.gameobjects.*
 import hacknslash.rgb.general.particles.GObjectParticle
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
-import hacknslash.rgb.general.physics.GSide
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.CollisionBits
 import hacknslash.rgb.specific.Const
-import ktx.collections.GdxArray
 import ktx.collections.gdxArrayOf
 
 class Enemy private constructor(x: Float, y: Float) :
@@ -35,21 +31,17 @@ class Enemy private constructor(x: Float, y: Float) :
         GObjectParticleEmitter {
 
     private val explosion = GBundle.bundle.assMan.getSound("Enemy")
+    override val dataMover: GDataMover = GDataMover(Const.enemySpeed)
     override val anim: Animation<TextureRegion> = GBundle.bundle.assMan.getAnimation("Enemy")
     override val dataHB: GDataHeartBeat = GDataHeartBeat(0.7f, 0.98f, GHeartBeatSpeed.MEDIUM)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(3, 1f, 0f, 0f)
     override var stuffToAvoid = gdxArrayOf<GActor>()
     override var avoidImpulseStrenght: Float = 1f
-    override val pPos = GVec2.get()
-    override val maxSpeed = Const.enemySpeed
-    override var trackImpulseStrength: Float = 0.2f
-    override val wanderPush: Float = maxSpeed / 2f
-    override val wanderPushDelay: Float = 0.2f
+    override val wandererData: GDataWanderer = GDataWanderer(maxSpeed / 2f, 0.2f)
+    override val trackerData: GDataTracker = GDataTracker(0.2f)
     override var hp = 10
     override val sensorRadius = Const.enemySenseRadius
     override var bTree: BehaviorTree<GAiBTree> = initTree("enemy")
-    override var targets: GdxArray<GActor> = GdxArray()
-    override var prevRotation: GSide = GSide.RIGHT
 
     override fun beat() {
         super.beat()

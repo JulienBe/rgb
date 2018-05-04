@@ -1,7 +1,7 @@
 package hacknslash.rgb.general
 
 import hacknslash.rgb.general.physics.GDim
-import hacknslash.rgb.specific.Wall
+import hacknslash.rgb.specific.actors.Wall
 
 class GMap(val walls: List<Wall>) {
 

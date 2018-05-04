@@ -9,14 +9,18 @@ import hacknslash.rgb.general.gameobjects.GParticleEmitter
 interface GObjectParticleEmitter: GParticleEmitter {
 
     val dataObjectPartEmitter: GDataObjectParticle
-    var r: Float get() = dataObjectPartEmitter.r
-        set(r) { dataObjectPartEmitter.r = r }
-    var g: Float get() = dataObjectPartEmitter.g
-        set(g) { dataObjectPartEmitter.g = g }
-    var b: Float get() = dataObjectPartEmitter.b
-        set(b) { dataObjectPartEmitter.b = b }
-    var offsetAmplitude: Float get() = dataObjectPartEmitter.offsetAmplitude
-        set(offsetAmplitude) { dataObjectPartEmitter.offsetAmplitude = offsetAmplitude }
+    var r: Float
+        get() =     dataObjectPartEmitter.r
+        set(r) {    dataObjectPartEmitter.r = r }
+    var g: Float
+        get() =     dataObjectPartEmitter.g
+        set(g) {    dataObjectPartEmitter.g = g }
+    var b: Float
+        get() =     dataObjectPartEmitter.b
+        set(b) {    dataObjectPartEmitter.b = b }
+    var offsetAmplitude: Float
+        get() =         dataObjectPartEmitter.offsetAmplitude
+        set(offset) {   dataObjectPartEmitter.offsetAmplitude = offset }
 
 
     fun ttl(): Int {

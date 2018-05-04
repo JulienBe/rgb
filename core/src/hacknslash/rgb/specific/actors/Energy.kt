@@ -5,35 +5,31 @@ import hacknslash.rgb.general.GMap
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
+import hacknslash.rgb.general.datas.GDataMover
 import hacknslash.rgb.general.datas.GDataObjectParticle
+import hacknslash.rgb.general.datas.GDataTracker
+import hacknslash.rgb.general.datas.GDataWanderer
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GMover
 import hacknslash.rgb.general.gameobjects.GSensor
 import hacknslash.rgb.general.particles.GObjectParticle
 import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.physics.GDim
-import hacknslash.rgb.general.physics.GSide
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.CollisionBits
-import ktx.collections.GdxArray
 
 class Energy(initPos: GVec2): GActor(dim, initPos, CollisionBits.energy, CollisionBits.energyCollision),
     GMover,
     GObjectParticleEmitter,
-    GSensor, GAiBTree,
+    GSensor,
     GWanderer,
     GTracker {
 
-    override var prevRotation: GSide = GSide.RIGHT
-    override val wanderPush: Float = 10f
-    override val wanderPushDelay: Float = 0.2f
-
+    override val wandererData: GDataWanderer = GDataWanderer(10f, 1f)
+    override val trackerData: GDataTracker = GDataTracker(0.1f)
     override var bTree: BehaviorTree<GAiBTree> = initTree("energy")
     override val sensorRadius: Float = 50f
-    override var targets: GdxArray<GActor> = GdxArray()
-    override var trackImpulseStrength: Float = 0.1f
-    override val pPos: GVec2 = GVec2.get()
-    override val maxSpeed: Float = 1000f
+    override val dataMover: GDataMover = GDataMover(1000f)
     override val dataObjectPartEmitter: GDataObjectParticle = GDataObjectParticle(1, 0.5f, 1f, 0.5f, 0f)
 
     override fun senses(a: GActor) {

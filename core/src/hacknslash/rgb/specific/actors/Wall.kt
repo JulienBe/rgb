@@ -1,4 +1,4 @@
-package hacknslash.rgb.specific
+package hacknslash.rgb.specific.actors
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
@@ -8,6 +8,7 @@ import hacknslash.rgb.general.gameobjects.GDrawable
 import hacknslash.rgb.general.gameobjects.GStatic
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GVec2
+import hacknslash.rgb.specific.CollisionBits
 
 class Wall(dim: GDim, initPos: GVec2) :
         GActor(dim, initPos, CollisionBits.wall, CollisionBits.wallCollisions),

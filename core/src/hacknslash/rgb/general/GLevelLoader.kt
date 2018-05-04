@@ -2,7 +2,7 @@ package hacknslash.rgb.general
 
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
-import hacknslash.rgb.specific.Wall
+import hacknslash.rgb.specific.actors.Wall
 
 object GLevelLoader {
 

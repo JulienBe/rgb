@@ -2,16 +2,28 @@ package hacknslash.rgb.general.gameobjects
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
+import hacknslash.rgb.general.datas.GDataMover
 import hacknslash.rgb.general.physics.GVec2
 
 interface GMover {
-    val pPos : GVec2
-    val maxSpeed : Float
+
+    val dataMover: GDataMover
+    var maxSpeed: Float
+        get() {
+            return dataMover.maxSpeed
+        }
+        set(maxSpeed) {
+            dataMover.maxSpeed = maxSpeed
+        }
+    val previousPos: GVec2
+        get() {
+            return dataMover.pPos
+        }
 
     //TODO remove this as
     fun move() {
         this as GActor
-        pPos.set(center)
+        previousPos.set(center)
 
         if (bodyType == BodyDef.BodyType.KinematicBody)
             setSpeed2(speed2 * 0.8f)

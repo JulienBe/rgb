@@ -27,8 +27,8 @@ class GWanderTask: LeafTask<GWanderer>() {
             else
                 degrees -= GRand.nextFloat() * amplitude
 
-            `object`.impulse(GVec2.get(`object`.wanderPush, 0f).setAngle(degrees))
-            nextPush = GClock.time + `object`.wanderPushDelay
+            `object`.impulse(GVec2.get(`object`.push, 0f).setAngle(degrees))
+            nextPush = GClock.time + `object`.delay
         }
         return Status.SUCCEEDED
     }
