@@ -43,7 +43,7 @@ open class GActor(val dim: GDim, val initPos: GVec2, val isA: Short, val collide
         if (this is GTtl)                   checkTtl()
         if (this is GDrawable)              draw()
         if (this is GAiBTree)               step()
-        if (this is GObjectParticleEmitter) emit()
+        if (this is GParticleEmitter)       emit()
         if (this is GHeartBeat)             beat()
         if (this is GAnimated)              animate()
         return dead

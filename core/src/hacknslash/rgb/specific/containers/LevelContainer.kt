@@ -18,11 +18,20 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
     val map: GMap = GLevelLoader.load("one")
     var enemiesNumber = 5
     val shapeRenderer = ShapeRenderer()
+    val energySpawner = GPeriodicCaller({
+        val e = Energy.get(map)
+        b.actors.add(e)
+    }, 1f)
 
     init {
         shapeRenderer.setAutoShapeType(true)
         map.walls.forEach {
             b.actors.add(it)
+        }
+        for (i in 1..5) {
+            val magnet = EnergyMagnet(GVec2.get(map.xInside(EnergyMagnet.dim), map.yInside(EnergyMagnet.dim)))
+            magnet.cx
+            b.actors.add(magnet)
         }
     }
 
@@ -35,6 +44,7 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
     override fun render(delta: Float) {
         b.delta = delta
 
+        energySpawner.act()
         GClock.act(delta)
         cam.position.set(b.player.cx, b.player.cy, 1f)
         b.physic.act(delta)
@@ -66,10 +76,7 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
 //            spawnEnemy()
 //            if (GRand.nextFloat() > 0.8f)
 //                enemiesNumber++
-            b.actors.add(Energy.get(map))
-            val magnet = EnergyMagnet(GVec2.get(map.xInside(EnergyMagnet.dim), map.yInside(EnergyMagnet.dim)))
-            magnet.cx
-            b.actors.add(magnet)
+//            b.actors.add(Energy.get(map))
 //            Enemy.count++
         }
     }
