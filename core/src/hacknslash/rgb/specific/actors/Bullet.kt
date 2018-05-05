@@ -13,7 +13,7 @@ import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.CollisionBits
 import hacknslash.rgb.specific.Const
 
-class Bullet private constructor(initPos: GVec2, initDir: GVec2) :
+class Bullet private constructor(initPos: GVec2, val initDir: GVec2) :
         GActor(dim, initPos, CollisionBits.bullet, CollisionBits.bulletCollisions),
         GMover,
         GTtl,
@@ -27,9 +27,11 @@ class Bullet private constructor(initPos: GVec2, initDir: GVec2) :
     override var ttl: Float = 3f
     override val strength: Int = 5
 
-    init {
+    override fun setup(): GActor {
+        super.setup()
         applyForce(initDir)
         setDamping(0f)
+        return this
     }
 
     override fun ttl(): Int {

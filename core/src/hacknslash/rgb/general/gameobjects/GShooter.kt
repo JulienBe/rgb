@@ -14,7 +14,7 @@ interface GShooter {
         (this as GActor)
         shotPatterns
                 .filter { it.shouldShoot && shouldShoot}
-                .forEach { GBundle.bundle.actors.add(it.shoot(this)) }
+                .forEach { GBundle.bundle.actors.toSetup(it.shoot(this)) }
     }
 
 }

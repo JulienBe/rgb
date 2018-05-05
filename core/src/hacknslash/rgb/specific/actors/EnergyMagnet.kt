@@ -31,8 +31,9 @@ class EnergyMagnet(pos: GVec2): GActor(dim, pos, CollisionBits.magnet, Collision
         currentWidth = dim.width * percentage
         hWidth = currentWidth / 2f
         if (percentage >= 1f) {
-            dead = true
-            GBundle.bundle.actors.add(Enemy.get(x, y))
+            Enemy.new(x, y)
+            hp = 0
+//            println("\tENEMY from $this")
         }
         super.collide(other)
     }

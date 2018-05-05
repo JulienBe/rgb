@@ -18,12 +18,13 @@ class Wall(dim: GDim, initPos: GVec2) :
     override val img: TextureRegion = GBundle.bundle.assMan.getTexture("Wall")
 
     companion object {
-        const val ratio = 1f / 16f
+        private const val ratio = 1f / 16f
         fun get(r: Rectangle): Wall {
             r.scale(ratio)
-            return Wall(
+            val wall =  Wall(
                     GDim(r.width, r.height),
                     GVec2.get(r.x, r.y))
+            return wall.setup() as Wall
         }
     }
 }

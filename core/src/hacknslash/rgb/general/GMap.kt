@@ -9,7 +9,7 @@ class GMap(val walls: List<Wall>) {
         return GRand.withinButNot(lowX, highX - dim.width, lowXExclusion, highXExclusion)
     }
     fun yInside(dim: GDim, lowYExclusion: Float = 0f, highYExclusion: Float = 0f): Float {
-        return GRand.withinButNot(lowY, highY - dim.width, lowYExclusion, highYExclusion)
+        return GRand.withinButNot(lowY, highY - dim.height, lowYExclusion, highYExclusion)
     }
 
     val width = walls.maxBy {

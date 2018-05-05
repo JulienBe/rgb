@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import hacknslash.rgb.general.gameobjects.*
+import hacknslash.rgb.specific.actors.EnergyMagnet
 import ktx.collections.GdxArray
 import kotlin.reflect.KFunction2
 
@@ -71,7 +72,8 @@ class GPhysic {
 
     fun removeAll(deadActors: GdxArray<GActor>) {
         deadActors.forEach {
-            it.destroyBody(world)
+//            println("destroy body $it")
+            world.destroyBody(it.body)
         }
     }
 
@@ -103,6 +105,8 @@ class GPhysic {
             actorB as GActor
 
             if (!fixA.isSensor && !fixB.isSensor) {
+//                if (actorA is EnergyMagnet || actorB is EnergyMagnet)
+//                    println("$this COLLIDE $actorA && $actorB")
                 collision(actorA, actorB)
                 collision(actorB, actorA)
             } else if (!(fixA.isSensor && fixB.isSensor)) {

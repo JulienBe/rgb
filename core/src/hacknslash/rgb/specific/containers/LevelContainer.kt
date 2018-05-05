@@ -16,29 +16,22 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
 
     val b = GBundle(assMan, this, spriteBatch)
     val map: GMap = GLevelLoader.load("one")
-    var enemiesNumber = 5
     val shapeRenderer = ShapeRenderer()
     val energySpawner = GPeriodicCaller({
         val e = Energy.get(map)
-        b.actors.add(e)
-    }, 1f)
+        b.actors.toSetup(e)
+    }, 0.1f)
 
     init {
+        b.player.setup()
         shapeRenderer.setAutoShapeType(true)
         map.walls.forEach {
-            b.actors.add(it)
+            b.actors.toSetup(it)
         }
-        for (i in 1..5) {
-            val magnet = EnergyMagnet(GVec2.get(map.xInside(EnergyMagnet.dim), map.yInside(EnergyMagnet.dim)))
-            magnet.cx
-            b.actors.add(magnet)
-        }
-    }
-
-    private fun spawnEnemy() {
-        b.actors.add(Enemy.get(
-                map.xInside(Enemy.dim, b.player.cx - 10f, b.player.cx + 10f),
-                map.yInside(Enemy.dim, b.player.cy - 10f, b.player.cy + 10f)))
+        for (i in 1..5)
+            b.actors.toSetup(
+                    EnergyMagnet(GVec2.get(map.xInside(EnergyMagnet.dim), map.yInside(EnergyMagnet.dim)))
+            )
     }
 
     override fun render(delta: Float) {
@@ -56,7 +49,6 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
         batch.setColor(1f, 1f, 1f, 1f)
         b.player.act()
         b.actors.act()
-        crowdControl()
         batch.end()
         bloom.render()
 //        debug()
@@ -69,16 +61,6 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
         shapeRenderer.line(b.player.cx, b.player.cy, b.player.cx + b.player.speedX, b.player.cy + b.player.speedY)
         shapeRenderer.end()
         b.physic.debug(cam)
-    }
-
-    private fun crowdControl() {
-        if (enemiesNumber > Enemy.count) {
-//            spawnEnemy()
-//            if (GRand.nextFloat() > 0.8f)
-//                enemiesNumber++
-//            b.actors.add(Energy.get(map))
-//            Enemy.count++
-        }
     }
 
     companion object {

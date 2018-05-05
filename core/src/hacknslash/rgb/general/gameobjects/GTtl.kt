@@ -13,6 +13,6 @@ interface GTtl {
 
     fun ttlExpired() {
         this as GActor
-        remove()
+        dead()
     }
 }

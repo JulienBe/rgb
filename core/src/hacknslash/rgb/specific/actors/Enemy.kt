@@ -93,7 +93,7 @@ class Enemy private constructor(x: Float, y: Float) :
             p.dirY *= 5f
             p.ttl *= 2
         }
-        GBundle.bundle.actors.add(PowerUp.get(GVec2.get(cx, cy)))
+        GBundle.bundle.actors.toSetup(PowerUp.get(GVec2.get(cx, cy)))
         super.dead()
     }
 
@@ -101,9 +101,9 @@ class Enemy private constructor(x: Float, y: Float) :
         var count = 0
         val dim = Const.enemyDim
 
-        fun get(x: Float, y: Float): Enemy {
+        fun new(x: Float, y: Float) {
             count++
-            return Enemy(x, y)
+            GBundle.bundle.actors.toSetup(Enemy(x, y))
         }
     }
 }

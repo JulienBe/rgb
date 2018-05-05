@@ -1,27 +1,24 @@
 package hacknslash.rgb.specific.actors
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
+import com.badlogic.gdx.utils.Pool
 import hacknslash.rgb.general.GMap
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
 import hacknslash.rgb.general.datas.GDataMover
-import hacknslash.rgb.general.datas.GDataObjectParticle
 import hacknslash.rgb.general.datas.GDataTracker
 import hacknslash.rgb.general.datas.GDataWanderer
 import hacknslash.rgb.general.gameobjects.GActor
 import hacknslash.rgb.general.gameobjects.GMover
-import hacknslash.rgb.general.gameobjects.GParticleEmitter
 import hacknslash.rgb.general.gameobjects.GSensor
-import hacknslash.rgb.general.particles.GObjectParticle
-import hacknslash.rgb.general.particles.GObjectParticleEmitter
 import hacknslash.rgb.general.particles.GStillParticle
 import hacknslash.rgb.general.particles.GStillParticleEmitter
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.CollisionBits
 
-class Energy(initPos: GVec2): GActor(dim, initPos, CollisionBits.energy, CollisionBits.energyCollision),
+class Energy private constructor(initPos: GVec2): GActor(dim, initPos, CollisionBits.energy, CollisionBits.energyCollision),
     GMover,
     GSensor,
     GStillParticleEmitter,
@@ -55,7 +52,7 @@ class Energy(initPos: GVec2): GActor(dim, initPos, CollisionBits.energy, Collisi
 
     override fun collide(other: GActor) {
         if (other is EnergyMagnet)
-            dead = true
+            hp = 0
         super.collide(other)
     }
 
@@ -64,11 +61,24 @@ class Energy(initPos: GVec2): GActor(dim, initPos, CollisionBits.energy, Collisi
             targets.removeValue(a, true)
     }
 
+    override fun dead() {
+        super.dead()
+        pool.free(this)
+    }
+
     companion object {
-        fun get(map: GMap): GActor {
-            return Energy(GVec2.get(map.xInside(dim), map.xInside(dim)))
+        val dim = GDim(GStillParticle.width, GStillParticle.width)
+        val pool = object : Pool<Energy>() {
+            override fun newObject(): Energy {
+                return Energy(GVec2.get())
+            }
         }
 
-        val dim = GDim(GStillParticle.width, GStillParticle.width)
+        fun get(map: GMap): GActor {
+            val e = pool.obtain()
+            e.initPos.x = map.xInside(dim)
+            e.initPos.y = map.yInside(dim)
+            return e
+        }
     }
 }
