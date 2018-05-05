@@ -1,27 +1,45 @@
 package hacknslash.rgb.specific.actors
 
-import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.gameobjects.GActor
-import hacknslash.rgb.general.gameobjects.GAnimated
+import hacknslash.rgb.general.gameobjects.GDrawable
 import hacknslash.rgb.general.gameobjects.GKinematic
+import hacknslash.rgb.general.particles.GColorGradient
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.CollisionBits
 
 class EnergyMagnet(pos: GVec2): GActor(dim, pos, CollisionBits.magnet, CollisionBits.magnetCollision),
         GKinematic,
-        GAnimated {
+        GDrawable {
 
-    override val anim: Animation<TextureRegion> = GBundle.bundle.assMan.getAnimation("Magnet")
+    var energy = 0
+    var percentage = 0f
+    var currentWidth = 0f
+    var hWidth = 0f
+    override val img: TextureRegion = GBundle.bundle.assMan.getTexture("Magnet")
 
-    override fun animate() {
-        GBundle.bundle.batch.setColor(0.5f, 1f, 0.5f, 1f)
-        super.animate()
+    override fun draw() {
+        GBundle.bundle.batch.setColor(colors.get(colors.size - (colors.size-1 * percentage).toInt()))
+        GBundle.bundle.batch.draw(img, cx - hWidth, cy - hWidth, currentWidth, currentWidth)
+    }
+
+    override fun collide(other: GActor) {
+        energy++
+        percentage = energy / popValue
+        currentWidth = dim.width * percentage
+        hWidth = currentWidth / 2f
+        if (percentage >= 1f) {
+            dead = true
+            GBundle.bundle.actors.add(Enemy.get(x, y))
+        }
+        super.collide(other)
     }
 
     companion object {
         val dim = GDim(5f, 5f)
+        val popValue = 50f
+        val colors = GColorGradient.ENERGY.colors
     }
 }

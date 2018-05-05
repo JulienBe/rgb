@@ -17,7 +17,8 @@ open class GAssMan(val pack: String = "atlas.pack") : AssetManager(), AssetError
             "GObjectParticle"   to "whitesqure",
             "Wall"              to "whitesqure",
             "Enemy"             to "whitesqure",
-            "Energy"            to "whitesqure"
+            "Energy"            to "whitesqure",
+            "Magnet"            to "whitesqure"
     )
     private val soundMapping = gdxMapOf(
             "explosionenemy"    to "explosionenemy",
@@ -26,7 +27,7 @@ open class GAssMan(val pack: String = "atlas.pack") : AssetManager(), AssetError
     private val animationMapping = gdxMapOf(
             "Enemy"            to   Triple(0.33f, "starradiance", Animation.PlayMode.LOOP_PINGPONG),
             "PowerUp"          to   Triple(0.13f, "starradiance", Animation.PlayMode.LOOP_PINGPONG),
-            "Magnet"           to   Triple(0.13f, "squareception", Animation.PlayMode.LOOP_PINGPONG)
+            "Magnet"           to   Triple(0.23f, "radiate", Animation.PlayMode.LOOP)
     )
     private val sounds = gdxMapOf<String, Sound>()
     private val textures = gdxMapOf<String, TextureRegion>()

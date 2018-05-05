@@ -6,9 +6,9 @@ import ktx.collections.GdxArray
 enum class GColorGradient(val colors: GdxArray<Float>) {
 
     ENERGY(ColorBuilder.buildArray(
-            0.25f, .7f, 0.25f, 0.4f,
-            0f, 0.25f, 0f, 0.1f,
-            0.98f, 0.98f, 0.98f, 0.97f
+            0.90f, 0.25f, 0.25f, 0.40f,
+            0.15f, 0.00f, 0.00f, 0.05f,
+            0.98f, 0.98f, 0.98f, 0.98f
     ))
 
 }
@@ -32,6 +32,7 @@ object ColorBuilder {
             b *= bMul
             a *= aMul
         }
+        println("size gradient " + colors.size)
         return colors
     }
 
