@@ -23,4 +23,8 @@ object GRand: Random() {
     fun gauss(i: Int): Int {
         return (nextGaussian() * i).toInt()
     }
+
+    fun float(min: Float, max: Float): Float {
+        return min + (nextFloat() * (max - min))
+    }
 }

@@ -44,10 +44,9 @@ class Energy private constructor(initPos: GVec2): GActor(dim, initPos, Collision
         }
     }
 
-    override fun emit() {
-        if (alternate)
-            super.emit()
+    override fun shouldEmit(): Boolean {
         alternate = !alternate
+        return alternate
     }
 
     override fun collide(other: GActor) {
@@ -68,6 +67,8 @@ class Energy private constructor(initPos: GVec2): GActor(dim, initPos, Collision
 
     companion object {
         val dim = GDim(GStillParticle.width, GStillParticle.width)
+        val w = dim.width
+        val hw = w / 2f
         val pool = object : Pool<Energy>() {
             override fun newObject(): Energy {
                 return Energy(GVec2.get())

@@ -8,9 +8,13 @@ interface GStillParticleEmitter: GParticleEmitter {
 
     override fun emit() {
         this as GActor
-        val p = GStillParticle.get()
-        p.x = x
-        p.y = y
-        GBundle.bundle.particles.add(p)
+        if (shouldEmit())
+            for (i in 1..emitAmount())
+                GBundle.bundle.particles.add(GStillParticle.get(emitX(), emitY()))
     }
+
+    fun GActor.emitX() = x
+    fun GActor.emitY() = y
+    fun emitAmount(): Int = 1
+    fun shouldEmit(): Boolean = true
 }

@@ -29,10 +29,14 @@ class GStillParticle: GParticle() {
     companion object {
         val colors: GColorGradient = GColorGradient.ENERGY
         val size = colors.colors.size
-        const val width: Float = 0.5f
+        const val width: Float = 1f
 
-        fun get(): GStillParticle {
-            return pool.obtain()
+
+        fun get(x: Float, y: Float): GStillParticle {
+            val p = pool.obtain()
+            p.x = x
+            p.y = y
+            return p
         }
 
         val pool = object : Pool<GStillParticle>() {
