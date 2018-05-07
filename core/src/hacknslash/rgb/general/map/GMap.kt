@@ -1,9 +1,11 @@
-package hacknslash.rgb.general
+package hacknslash.rgb.general.map
 
+import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.specific.actors.Wall
 
 class GMap(val walls: List<Wall>) {
+
 
     fun xInside(dim: GDim, lowXExclusion: Float = 0f, highXExclusion: Float = 0f): Float {
         return GRand.withinButNot(lowX, highX - dim.width, lowXExclusion, highXExclusion)

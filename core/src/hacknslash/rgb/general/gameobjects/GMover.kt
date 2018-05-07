@@ -24,9 +24,6 @@ interface GMover {
     fun move() {
         this as GActor
         previousPos.set(center)
-
-        if (bodyType == BodyDef.BodyType.KinematicBody)
-            setSpeed2(speed2 * 0.8f)
     }
 
     fun addDir(x: Float, y: Float) {

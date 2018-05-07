@@ -2,7 +2,7 @@ package hacknslash.rgb.specific.actors
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.utils.Pool
-import hacknslash.rgb.general.GMap
+import hacknslash.rgb.general.map.GMap
 import hacknslash.rgb.general.behaviors.GAiBTree
 import hacknslash.rgb.general.behaviors.GTracker
 import hacknslash.rgb.general.behaviors.GWanderer
@@ -27,19 +27,16 @@ class Energy private constructor(initPos: GVec2): GActor(dim, initPos, Collision
 
     override val wandererData: GDataWanderer = GDataWanderer(100f, 1f)
     override val trackerData: GDataTracker = GDataTracker(0.3f)
+    override val dataMover: GDataMover = GDataMover(1000f)
     override var bTree: BehaviorTree<GAiBTree> = initTree("energy")
     override val sensorRadius: Float = 100f
-    override val dataMover: GDataMover = GDataMover(1000f)
     var alternate = false
 
     override fun senses(a: GActor) {
         if (a is EnergyMagnet) {
             targets.add(a)
             targets.sort { one, two ->
-                if (one.center.dst(cx, cy) > two.center.dst(cx, cy))
-                    1
-                else
-                    -1
+                if (one.center.dst(cx, cy) > two.center.dst(cx, cy)) 1 else -1
             }
         }
     }
@@ -69,6 +66,7 @@ class Energy private constructor(initPos: GVec2): GActor(dim, initPos, Collision
         val dim = GDim(GStillParticle.width, GStillParticle.width)
         val w = dim.width
         val hw = w / 2f
+
         val pool = object : Pool<Energy>() {
             override fun newObject(): Energy {
                 return Energy(GVec2.get())

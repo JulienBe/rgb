@@ -7,8 +7,8 @@ import hacknslash.rgb.general.*
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.graphics.GScreen
+import hacknslash.rgb.general.map.GMap
 import hacknslash.rgb.general.physics.GVec2
-import hacknslash.rgb.specific.actors.Enemy
 import hacknslash.rgb.specific.actors.Energy
 import hacknslash.rgb.specific.actors.EnergyMagnet
 
@@ -20,7 +20,7 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
     val energySpawner = GPeriodicCaller({
         val e = Energy.get(map)
         b.actors.toSetup(e)
-    }, 0.1f)
+    }, 1f)
 
     init {
         b.player.setup()

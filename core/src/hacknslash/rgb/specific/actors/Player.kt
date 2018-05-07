@@ -14,9 +14,10 @@ import hacknslash.rgb.specific.ShotPatterns
 import ktx.collections.gdxArrayOf
 
 class Player private constructor() :
-        GActor(Const.playerDim, GVec2.get(), CollisionBits.player, CollisionBits.playerCollisions),
+        GActor(Const.playerDim, GVec2.get(5f, 5f), CollisionBits.player, CollisionBits.playerCollisions),
         GMover,
         GControllable,
+//        GKinematic,
         GShooter,
         GObjectParticleEmitter {
 
@@ -37,8 +38,16 @@ class Player private constructor() :
         keyPressed(Input.Keys.RIGHT, {addVelocity(Const.playerImpulse, 0f)})
     }
 
+    override fun setup(): GActor {
+        super.setup()
+        body.fixtureList.first().friction = 1f
+        body.fixtureList.first().density = 1f
+        return this
+    }
+
     override fun move() {
         clampSpeed()
+        setSpeed2(speed2 * 0.4f)
         super.move()
     }
 

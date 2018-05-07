@@ -19,7 +19,7 @@ class EnergyMagnet(pos: GVec2): GActor(dim, pos, CollisionBits.magnet, Collision
     var hWidth = 0f
     var nextEmit = 0
     var emitPeriod = 8
-    var amount = 1
+    var amount = 0
 
     override fun collide(other: GActor) {
         updateEnergy()
@@ -37,7 +37,7 @@ class EnergyMagnet(pos: GVec2): GActor(dim, pos, CollisionBits.magnet, Collision
         currentWidth = dim.width * percentage
         hWidth = currentWidth / 2f
         emitPeriod = ((1f - percentage) * 8).toInt()
-        amount = (1 + (percentage * 3)).toInt()
+        amount = ((percentage + 0.32f) * 3).toInt()
     }
 
     override fun emitAmount(): Int {

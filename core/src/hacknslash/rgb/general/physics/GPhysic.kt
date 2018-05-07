@@ -3,15 +3,18 @@ package hacknslash.rgb.general.physics
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import hacknslash.rgb.general.gameobjects.*
-import hacknslash.rgb.specific.actors.EnergyMagnet
+import hacknslash.rgb.general.gameobjects.GActor
+import hacknslash.rgb.general.gameobjects.GKinematic
+import hacknslash.rgb.general.gameobjects.GSensor
+import hacknslash.rgb.general.gameobjects.GStatic
+import hacknslash.rgb.specific.actors.Player
 import ktx.collections.GdxArray
 import kotlin.reflect.KFunction2
 
 class GPhysic {
-    val debugRenderer = Box2DDebugRenderer()
-    val world = World(Vector2(0f, 0f), true)
-    var accumulator = 0f
+    private val debugRenderer = Box2DDebugRenderer()
+    private val world = World(Vector2(0f, 0f), true)
+    private var accumulator = 0f
 
     init {
         world.setContactListener(GContactListener())
@@ -72,31 +75,18 @@ class GPhysic {
 
     fun removeAll(deadActors: GdxArray<GActor>) {
         deadActors.forEach {
-//            println("destroy body $it")
             world.destroyBody(it.body)
         }
     }
 
     companion object {
-        val timestep = 1f/60f
-        val velocityIterations = 6
-        val positionIterations = 2
+        const val timestep = 1f/60f
+        const val velocityIterations = 6
+        const val positionIterations = 2
     }
 
     class GContactListener : ContactListener {
-        override fun preSolve(contact: Contact?, oldManifold: Manifold?) {}
-        override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {}
-
-        override fun endContact(contact: Contact?) {
-            check(contact, GActor::stopCollide, GSensor::stopSenses)
-        }
-
-        override fun beginContact(contact: Contact?) {
-            check(contact, GActor::collide, GSensor::senses)
-        }
-
-        private fun check(contact: Contact?, collision: KFunction2<GActor, @ParameterName(name = "other") GActor, Unit>, sens: KFunction2<GSensor, @ParameterName(name = "a") GActor, Unit>) {
-            contact!!
+        override fun preSolve(contact: Contact, oldManifold: Manifold) {
             val fixA = contact.fixtureA
             val fixB = contact.fixtureB
             val actorA = fixA.body.userData
@@ -104,9 +94,39 @@ class GPhysic {
             actorA as GActor
             actorB as GActor
 
+            if (actorA is Player)
+                playerCollision(actorA, actorB, contact)
+            if (actorB is Player)
+                playerCollision(actorB, actorA, contact)
+
+        }
+
+        fun playerCollision(p: Player, other: GActor, contact: Contact) {
+            contact.restitution = 0f
+        }
+
+        override fun postSolve(contact: Contact, impulse: ContactImpulse?) {}
+
+        override fun endContact(contact: Contact) {
+            check(contact, GActor::stopCollide, GSensor::stopSenses)
+        }
+
+        override fun beginContact(contact: Contact) {
+            check(contact, GActor::collide, GSensor::senses)
+        }
+
+        private fun check(contact: Contact, collision: KFunction2<GActor, @ParameterName(name = "other") GActor, Unit>, sens: KFunction2<GSensor, @ParameterName(name = "a") GActor, Unit>) {
+            val fixA = contact.fixtureA
+            val fixB = contact.fixtureB
+            val actorA = fixA.body.userData
+            val actorB = fixB.body.userData
+            actorA as GActor
+            actorB as GActor
+
+//            if (actorA is Player || actorB is Player)
+//                println("player $actorA & $actorB")
+
             if (!fixA.isSensor && !fixB.isSensor) {
-//                if (actorA is EnergyMagnet || actorB is EnergyMagnet)
-//                    println("$this COLLIDE $actorA && $actorB")
                 collision(actorA, actorB)
                 collision(actorB, actorA)
             } else if (!(fixA.isSensor && fixB.isSensor)) {

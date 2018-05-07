@@ -14,7 +14,7 @@ object CollisionBits {
     val playerCollisions: Short = enemy.or(wall).or(powerUp)
     val enemyCollisions: Short = enemy.or(wall).or(bullet).or(player)
     val bulletCollisions: Short = enemy.or(wall)
-    val wallCollisions: Short = player.or(enemy).or(bullet).or(powerUp).or(wall)
+    val wallCollisions: Short = player.or(enemy).or(bullet).or(powerUp).or(energy)
     val powerUpCollision: Short = player.or(enemy).or(wall)
     val energyCollision: Short = wall.or(magnet)
     val magnetCollision: Short = energy

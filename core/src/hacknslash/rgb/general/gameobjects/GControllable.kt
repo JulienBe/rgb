@@ -3,7 +3,7 @@ package hacknslash.rgb.general.gameobjects
 import hacknslash.rgb.general.GInput
 import hacknslash.rgb.general.bundles.GBundle
 
-interface GControllable: GKinematic {
+interface GControllable {
 
     val input: GInput
 
