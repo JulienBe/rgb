@@ -7,6 +7,7 @@ import hacknslash.rgb.general.*
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.bundles.GBundle
 import hacknslash.rgb.general.graphics.GScreen
+import hacknslash.rgb.general.map.GLevelLoader
 import hacknslash.rgb.general.map.GMap
 import hacknslash.rgb.general.physics.GVec2
 import hacknslash.rgb.specific.actors.Energy
@@ -15,7 +16,7 @@ import hacknslash.rgb.specific.actors.EnergyMagnet
 class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GScreen(game, spriteBatch, width, height), InputHandler {
 
     val b = GBundle(assMan, this, spriteBatch)
-    val map: GMap = GLevelLoader.load("one")
+    val map: GMap = GLevelLoader.proceduralGeneration()
     val shapeRenderer = ShapeRenderer()
     val energySpawner = GPeriodicCaller({
         val e = Energy.get(map)
@@ -51,7 +52,7 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
         b.actors.act()
         batch.end()
         bloom.render()
-//        debug()
+        debug()
     }
 
     private fun debug() {

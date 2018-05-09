@@ -14,7 +14,7 @@ import hacknslash.rgb.specific.ShotPatterns
 import ktx.collections.gdxArrayOf
 
 class Player private constructor() :
-        GActor(Const.playerDim, GVec2.get(5f, 5f), CollisionBits.player, CollisionBits.playerCollisions),
+        GActor(Const.playerDim, GVec2.get(15f, 15f), CollisionBits.player, CollisionBits.playerCollisions),
         GMover,
         GControllable,
 //        GKinematic,

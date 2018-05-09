@@ -3,8 +3,9 @@ package hacknslash.rgb.general.map
 import hacknslash.rgb.general.GRand
 import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.specific.actors.Wall
+import ktx.collections.GdxArray
 
-class GMap(val walls: List<Wall>) {
+class GMap(val walls: GdxArray<Wall>) {
 
 
     fun xInside(dim: GDim, lowXExclusion: Float = 0f, highXExclusion: Float = 0f): Float {

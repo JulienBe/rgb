@@ -26,6 +26,9 @@ class Wall(dim: GDim, initPos: GVec2) :
                     GVec2.get(r.x, r.y))
             return wall.setup() as Wall
         }
+        fun get(x: Float, y: Float, width: Float): Wall {
+            return Wall(GDim(width, width), GVec2.get(x, y)).setup() as Wall
+        }
     }
 }
 
