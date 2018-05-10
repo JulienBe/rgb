@@ -3,7 +3,7 @@ package hacknslash.rgb.specific
 import hacknslash.rgb.general.physics.GDim
 
 object Const {
-    const val playerSpeed = 900f
+    const val playerSpeed = 9000f
     const val playerImpulse = playerSpeed
     const val bulletSpeed = playerSpeed * 40f
     const val enemySpeed = 60f

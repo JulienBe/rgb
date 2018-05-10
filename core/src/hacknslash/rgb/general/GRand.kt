@@ -27,4 +27,8 @@ object GRand: Random() {
     fun float(min: Float, max: Float): Float {
         return min + (nextFloat() * (max - min))
     }
+
+    fun int(min: Int, max: Int): Int {
+        return min + nextInt(max)
+    }
 }

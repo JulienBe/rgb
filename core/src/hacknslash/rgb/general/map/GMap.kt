@@ -5,7 +5,7 @@ import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.specific.actors.Wall
 import ktx.collections.GdxArray
 
-class GMap(val walls: GdxArray<Wall>) {
+class GMap(val walls: GdxArray<Wall>, val map: GMapHolder) {
 
 
     fun xInside(dim: GDim, lowXExclusion: Float = 0f, highXExclusion: Float = 0f): Float {
@@ -13,6 +13,9 @@ class GMap(val walls: GdxArray<Wall>) {
     }
     fun yInside(dim: GDim, lowYExclusion: Float = 0f, highYExclusion: Float = 0f): Float {
         return GRand.withinButNot(lowY, highY - dim.height, lowYExclusion, highYExclusion)
+    }
+
+    fun ascii() {
     }
 
     val width = walls.maxBy {

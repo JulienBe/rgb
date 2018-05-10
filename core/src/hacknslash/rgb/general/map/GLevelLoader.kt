@@ -6,24 +6,29 @@ import java.util.function.Consumer
 
 object GLevelLoader {
 
-    const val wallWidth = 1f
+    const val wallWidth = 2f
     const val mapWidth = 100
-    val mapHolder = MapHolder()
+    val mapHolder = GMapHolder()
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val map = GLevelLoader.proceduralGeneration()
+        map.ascii()
+    }
 
     fun proceduralGeneration(): GMap {
-        makeWalls()
+        placeRooms(10, 30)
         return processValues()
     }
 
-    private fun makeWalls() {
-        var x = mapWidth / 2
-        var y = mapWidth / 2
-        mapHolder.setVal(x, y, MapValues.WALL)
+    private fun placeRooms(minWidth: Int, maxWidth: Int) {
         for (i in 0 until 10) {
-            mapHolder.setVal(x + i, y, MapValues.WALL)
-            mapHolder.setVal(x - i, y, MapValues.WALL)
-            mapHolder.setVal(x, y + i, MapValues.WALL)
-            mapHolder.setVal(x, y - i, MapValues.WALL)
+            val candidate = GArea.getRandom(minWidth, maxWidth)
+            if (!mapHolder.contains(candidate, GMapValue.ROOM)) {
+                mapHolder.markArea(candidate, GMapValue.ROOM)
+                mapHolder.markAreaEdges(candidate, GMapValue.WALL)
+                println("placed room $candidate")
+            }
         }
     }
 
@@ -31,10 +36,10 @@ object GLevelLoader {
         val walls = GdxArray<Wall>()
         mapHolder.forEach(Consumer {
             entry ->
-            if (entry.value == MapValues.WALL)
+            if (entry.value.and(GMapValue.WALL.i) != 0)
                 walls.add(Wall.get(entry.key % mapWidth * wallWidth, entry.key / mapWidth * wallWidth, wallWidth))
         })
-        return GMap(walls)
+        return GMap(walls, mapHolder)
     }
 
 }
