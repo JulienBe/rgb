@@ -1,11 +1,14 @@
 package hacknslash.rgb.general.map
 
 import com.badlogic.gdx.utils.ObjectMap
+import ktx.collections.GdxArray
 import ktx.collections.GdxMap
+import ktx.collections.set
 import java.util.function.Consumer
 
-class GMapHolder() {
+class GMapHolder {
     private val mapArray: GdxMap<Int, Int> = GdxMap()
+    val rooms: GdxArray<GArea> = GdxArray()
 
     internal fun setVal(x: Int, y: Int, value: GMapValue) {
         mapArray.put(convert(x, y), value.i)
@@ -16,7 +19,7 @@ class GMapHolder() {
     }
 
     internal fun getVals(x: Int, y: Int): List<GMapValue> {
-        val current =  mapArray.get(convert(x, y))
+        val current: Int =  if (mapArray.containsKey(convert(x, y))) mapArray.get(convert(x, y)) else 0
         return GMapValue.values().filter {
             it.i.and(current) != 0
         }
@@ -33,6 +36,19 @@ class GMapHolder() {
                     return true
         return false
     }
+    internal fun containsHorizontal(x: Int, width: Int, y: Int, value: GMapValue): Boolean {
+        for (i in x until x + width)
+            if (contains(i, y, value))
+                return true
+        return false
+    }
+    internal fun containsVertical(x: Int, y: Int, height: Int, value: GMapValue): Boolean {
+        for (i in y until y + height)
+            if (contains(x, i, value))
+                return true
+        return false
+    }
+
     internal fun contains(area: GArea, value: GMapValue): Boolean = contains(area.x, area.y, area.width, area.height, value)
 
     internal fun markArea(area: GArea, value: GMapValue) {
@@ -49,13 +65,32 @@ class GMapHolder() {
 
     fun markAreaEdges(a: GArea, value: GMapValue) {
         for (i in 0 until a.width) {
-            GLevelLoader.mapHolder.addVal(a.x + i, a.y, value)
-            GLevelLoader.mapHolder.addVal(a.x + i, a.y + a.height - 1, value)
+            GLevelLoader.map.addVal(a.x + i, a.y, value)
+            GLevelLoader.map.addVal(a.x + i, a.y + a.height - 1, value)
         }
         for (i in 0 until a.height) {
-            GLevelLoader.mapHolder.addVal(a.x, a.y + i, value)
-            GLevelLoader.mapHolder.addVal(a.x + a.width - 1, a.y + i, value)
+            GLevelLoader.map.addVal(a.x, a.y + i, value)
+            GLevelLoader.map.addVal(a.x + a.width - 1, a.y + i, value)
         }
+    }
+
+    fun addRoom(room: GArea) {
+        rooms.add(room)
+    }
+
+    fun removeVal(x: Int, y: Int, value: GMapValue) {
+        println("remove $x $y " + mapArray[convert(x, y)])
+        mapArray[convert(x, y)] = mapArray[convert(x, y)].xor(value.i)
+        println("?????? $x $y " + mapArray[convert(x, y)])
+    }
+
+    fun exist(x: Int, y: Int): Boolean {
+        return mapArray.containsKey(convert(x, y))
+    }
+
+    fun containsEdges(x: Int, y: Int, width: Int, height: Int, value: GMapValue): Boolean {
+        return (containsHorizontal(x, y, width, value) && containsHorizontal(x, y + height - 1, width, value) &&
+                containsVertical(x, y, height, value) && containsVertical(x + width - 1, y, height, value))
     }
 
 }

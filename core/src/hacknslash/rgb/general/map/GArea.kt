@@ -11,5 +11,12 @@ data class GArea(val x: Int, val y: Int, val width: Int, val height: Int) {
             val y = GRand.int(0, GLevelLoader.mapWidth - roomHeight)
             return GArea(x, y, roomWidth, roomHeight)
         }
+        fun getGauss(min: Int, mod: Float): GArea {
+            val roomWidth = min + Math.abs(GRand.gauss(mod).toInt())
+            val roomHeight = min + Math.abs(GRand.gauss(mod).toInt())
+            val x = GRand.int(0, GLevelLoader.mapWidth - roomWidth)
+            val y = GRand.int(0, GLevelLoader.mapWidth - roomHeight)
+            return GArea(x, y, roomWidth, roomHeight)
+        }
     }
 }
