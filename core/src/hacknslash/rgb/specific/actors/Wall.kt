@@ -17,6 +17,11 @@ class Wall(dim: GDim, initPos: GVec2) :
 
     override val img: TextureRegion = GBundle.bundle.assMan.getTexture("Wall")
 
+    override fun draw() {
+        GBundle.bundle.batch.setColor(0.75f, 0.75f, 0.75f, 0.75f)
+        super.draw()
+    }
+
     companion object {
         private const val ratio = 1f / 32f
         fun get(r: Rectangle): Wall {

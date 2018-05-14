@@ -1,28 +1,119 @@
 package hacknslash.rgb.general.map
 
+import hacknslash.rgb.general.GRand
 import hacknslash.rgb.specific.actors.Wall
 import ktx.collections.GdxArray
+import ktx.collections.GdxSet
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import java.util.function.Consumer
 import javax.imageio.ImageIO
 
-object GLevelLoader {
+class GLevelLoader {
 
-    const val wallWidth = 2f
-    const val mapWidth = 100
-    const val roomAttempts = 1200
-    val map = GMapHolder()
-    private val roomGenerator = GAreaPackage.MEDIUM_GUASS_ROOMS
+    private val squareWidth = 8f
+    private val drawSize = 4
+    val mapWidth = 110
+    val mapHalfWidth = mapWidth / 2
+    val map = GMapHolder(mapWidth)
     private val wall = GMapValue.WALL
     private val room = GMapValue.ROOM
 
     fun proceduralGeneration(): GMap {
-        placeRooms()
-        surround(room, wall)
-        fixRoomEdges()
+        val seed = 1L
+        GRand.setSeed(seed)
+        timed({placeRooms(GAreaPackage.HUGE_GUASS_ROOMS, 10)}, "room gen 1")
+        timed({placeRooms(GAreaPackage.BIG_GUASS_ROOMS, 500)}, "room gen 2")
+        timed({placeRooms(GAreaPackage.SMALL_NORMAL_ROOMS, 10000)}, "room gen 3")
+        timed({surround(room, wall)}, "surround")
+        timed({fixRoomEdges()}, "fix edges")
+        timed({placeHallways()}, "hallways")
+        timed({detectHubs()}, "detect hubs")
         return processValues()
+    }
+
+    private fun timed(function: () -> Unit, output: String) {
+        val start = System.currentTimeMillis()
+        function.invoke()
+        println("$output ${System.currentTimeMillis() - start}")
+    }
+
+    private fun detectHubs() {
+        map.rooms.forEach {
+            if (!map.hubsContainers(it.centerX, it.centerY))
+                map.addHub(detectArea(it.centerX, it.centerY, GdxSet()))
+        }
+    }
+
+    private fun detectArea(x: Int, y: Int, set: GdxSet<Int>): GdxSet<Int> {
+        if (!isRoom(x, y) || isWall(x, y))
+            return set
+        val toProcess = GdxSet<Int>()
+        toProcess.add(map.convert(x, y))
+        while (toProcess.size > 0) {
+            val current = toProcess.first()
+            if (isRoom(current) && !isWall(current) && !set.contains(current)) {
+                toProcess.add(current - 1)
+                toProcess.add(current + 1)
+                toProcess.add(current + mapWidth)
+                toProcess.add(current - mapWidth)
+                set.add(current)
+            }
+            toProcess.remove(current)
+        }
+        return set
+    }
+
+    private fun placeHallways() {
+        map.rooms.forEach {
+            if (roomNotConnected(it)) {
+                val dirX = it.centerX >= mapHalfWidth
+                val dirY = it.centerY >= mapHalfWidth
+                for (i in 0 until (it.width + it.height) / 2) {
+                    if (dirX && dirY)   hallwayHorizontal(it, -1, it.x - i)
+                    if (!dirX && !dirY) hallwayHorizontal(it,  1, (it.x - 1) + it.width + i)
+                    if (dirY && !dirX)  hallwayVertical(it, -1, it.y - i)
+                    if (!dirY && dirX)  hallwayVertical(it, 1, (it.y - 1) + it.width + i)
+                }
+            }
+        }
+    }
+
+    private fun hallwayVertical(it: GArea, mod: Int, baseY: Int) {
+        // sides
+        map.placeIfNot(it.centerX - 2, baseY, wall, room)
+        map.placeIfNot(it.centerX + 1, baseY, wall, room)
+        // terminator
+        map.placeIfNot(it.centerX + 1, baseY + mod, wall, room)
+        map.placeIfNot(it.centerX, baseY + mod, wall, room)
+        map.placeIfNot(it.centerX - 1, baseY + mod, wall, room)
+        map.placeIfNot(it.centerX - 2, baseY + mod, wall, room)
+
+        if (isWall(it.centerX, baseY))
+            map.removeVal(it.centerX, baseY, wall)
+        if (isWall(it.centerX - 1, baseY))
+            map.removeVal(it.centerX - 1, baseY, wall)
+        map.addVal(it.centerX, baseY, room)
+        map.addVal(it.centerX - 1, baseY, room)
+    }
+
+    private fun hallwayHorizontal(it: GArea, mod: Int, baseX: Int) {
+        // sides
+        map.placeIfNot(baseX, it.centerY - 2, wall, room)
+        map.placeIfNot(baseX, it.centerY + 1, wall, room)
+        // terminator
+        map.placeIfNot(baseX + mod, it.centerY + 1, wall, room)
+        map.placeIfNot(baseX + mod, it.centerY, wall, room)
+        map.placeIfNot(baseX + mod, it.centerY - 1, wall, room)
+        map.placeIfNot(baseX + mod, it.centerY - 2, wall, room)
+
+        if (isWall(baseX, it.centerY))
+            map.removeVal(baseX, it.centerY, wall)
+        if (isWall(baseX, it.centerY - 1))
+            map.removeVal(baseX, it.centerY - 1, wall)
+        map.addVal(baseX, it.centerY, room)
+        map.addVal(baseX, it.centerY - 1, room)
     }
 
     private fun fixRoomEdges() {
@@ -30,13 +121,13 @@ object GLevelLoader {
         for (x in 0 until mapWidth)
             for (y in 0 until mapWidth) {
                 if (!map.exist(x, y)) {
-                    if (map.contains(x + 1, y, wall) && map.contains(x, y + 1, wall) && map.contains(x + 1, y + 1, room))
+                    if (isWall(x + 1, y) && isWall(x, y + 1) && isRoom(x + 1, y + 1))
                         toAdd.add(Pair(x, y))
-                    if (map.contains(x - 1, y, wall) && map.contains(x, y - 1, wall) && map.contains(x - 1, y - 1, room))
+                    if (isWall(x - 1, y) && isWall(x, y - 1) && isRoom(x - 1, y - 1))
                         toAdd.add(Pair(x, y))
-                    if (map.contains(x - 1, y, wall) && map.contains(x, y + 1, wall) && map.contains(x - 1, y + 1, room))
+                    if (isWall(x - 1, y) && isWall(x, y + 1) && isRoom(x - 1, y + 1))
                         toAdd.add(Pair(x, y))
-                    if (map.contains(x + 1, y, wall) && map.contains(x, y - 1, wall) && map.contains(x + 1, y - 1, room))
+                    if (isWall(x + 1, y) && isWall(x, y - 1) && isRoom(x + 1, y - 1))
                         toAdd.add(Pair(x, y))
                 }
             }
@@ -56,6 +147,26 @@ object GLevelLoader {
                 }
             }
     }
+    private fun roomNotConnected(area: GArea): Boolean {
+        for (x in area.x until area.x + area.width) {
+            if (!isWall(x, area.y))
+                return false
+            if (!isWall(x, (area.y - 1) + area.height))
+                return false
+        }
+        for (y in area.y until area.y + area.height) {
+            if (!isWall(area.x, y))
+                return false
+            if (!isWall((area.x - 1) + area.width, y))
+                return false
+        }
+        return true
+    }
+
+    private fun isRoom(x: Int, y: Int) = map.contains(x, y, room)
+    private fun isRoom(coord: Int) = map.contains(coord, room)
+    private fun isWall(x: Int, y: Int) = map.contains(x, y, wall)
+    private fun isWall(coord: Int) = map.contains(coord, wall)
 
     private fun antiAlias(value: GMapValue) {
         for (x in 0 until mapWidth step 2)
@@ -71,13 +182,12 @@ object GLevelLoader {
             }
     }
 
-    private fun placeRooms() {
-        for (i in 0 until roomAttempts) {
-            val candidate = roomGenerator.generate.invoke()
-            if (!map.contains(candidate, room)) {
+    private fun placeRooms(roomGenerator: GAreaPackage, attempts: Int) {
+        for (i in 0 until attempts) {
+            val candidate = roomGenerator.generate.invoke(mapWidth)
+            if (!map.contains(candidate, room) && candidate.x > 0 && candidate.y > 0) {
                 map.markArea(candidate, room)
                 map.addRoom(candidate)
-                println("placed room $candidate")
             }
         }
     }
@@ -87,24 +197,50 @@ object GLevelLoader {
         map.forEach(Consumer {
             entry ->
             if (entry.value.and(wall.i) != 0)
-                walls.add(Wall.get(entry.key % mapWidth * wallWidth, entry.key / mapWidth * wallWidth, wallWidth))
+                walls.add(Wall.get(entry.key % mapWidth * squareWidth, entry.key / mapWidth * squareWidth, squareWidth))
         })
 
-        val img = BufferedImage(mapWidth * 3, mapWidth * 3, BufferedImage.TYPE_INT_ARGB)
+        val img = BufferedImage(mapWidth * drawSize, mapWidth * drawSize, BufferedImage.TYPE_INT_ARGB)
+//        drawRooms(img)
         for (x in mapWidth - 1 downTo 0)
             for (y in mapWidth - 1 downTo 0) {
                 val values = map.getVals(x, (mapWidth - 1) - y)
                 if (values.contains(GMapValue.EMPTY))
-                    img.setRGB(x, y, Color.BLACK.rgb, 3)
+                    img.setRGB(x, y, Color.PINK.rgb, drawSize)
                 if (values.contains(room))
-                    img.setRGB(x, y, Color.LIGHT_GRAY.rgb, 3)
+                    img.setRGB(x, y, Color.LIGHT_GRAY.rgb, drawSize)
                 if (values.contains(wall))
-                    img.setRGB(x, y, Color.DARK_GRAY.rgb, 3)
+                    img.setRGB(x, y, Color.DARK_GRAY.rgb, drawSize)
             }
+        drawHubs(img)
         val f = File("/home/j/rgb/map${System.currentTimeMillis()}.png")
         ImageIO.write(img, "png", f)
         return GMap(walls, map)
     }
+
+    private fun drawHubs(img: BufferedImage) {
+        map.hubs.forEach {
+            val color = Color.getHSBColor(GRand.nextFloat(), GRand.nextFloat(), GRand.nextFloat()).rgb
+            it.forEach { square ->
+                val coord = map.unconvert(square)
+                img.setRGB(coord.first, (mapWidth - 1) - coord.second, color, drawSize)
+            }
+        }
+    }
+
+    private fun drawRooms(img: BufferedImage) {
+        map.rooms.forEach {
+            val roomColor =
+                    if (roomNotConnected(it))
+                        Color.RED.rgb
+                    else
+                        Color.LIGHT_GRAY.rgb
+            for (x in it.x until it.x + it.width)
+                for (y in it.y until it.y + it.height)
+                    img.setRGB(x, (mapWidth - 1) - y, roomColor, drawSize)
+        }
+    }
+
 
 }
 
