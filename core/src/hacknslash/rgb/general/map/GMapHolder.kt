@@ -20,8 +20,10 @@ class GMapHolder(val mapWidth: Int) {
         mapArray.put(convert(x, y), value.i.or(current))
     }
 
-    internal fun getVals(x: Int, y: Int): List<GMapValue> {
-        val current: Int =  if (mapArray.containsKey(convert(x, y))) mapArray.get(convert(x, y)) else 0
+    internal fun getVals(x: Int, y: Int): List<GMapValue> = getVals(convert(x, y))
+
+    internal fun getVals(coord: Int): List<GMapValue> {
+        val current: Int =  if (mapArray.containsKey(coord)) mapArray.get(coord) else 0
         return GMapValue.values().filter {
             it.i.and(current) != 0
         }
@@ -121,6 +123,15 @@ class GMapHolder(val mapWidth: Int) {
                 return true
         }
         return false
+    }
+
+    fun remove(key: Int) {
+        mapArray.remove(key)
+    }
+
+    fun containsOnly(i: Int, value: GMapValue): Boolean {
+        val vals = getVals(i)
+        return vals.size == 1 && vals.first() == value
     }
 
 }

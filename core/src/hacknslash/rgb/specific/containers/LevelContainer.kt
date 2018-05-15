@@ -24,8 +24,8 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
     }, 1000f)
 
     init {
-        for (i in 0..3)
-            GLevelLoader().proceduralGeneration()
+//        for (i in 0..20)
+//            GLevelLoader().proceduralGeneration()
         b.player.setup()
         shapeRenderer.setAutoShapeType(true)
         map.walls.forEach {

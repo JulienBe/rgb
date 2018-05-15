@@ -14,23 +14,48 @@ class GLevelLoader {
 
     private val squareWidth = 8f
     private val drawSize = 4
-    val mapWidth = 110
+    val mapWidth = 200
     val mapHalfWidth = mapWidth / 2
     val map = GMapHolder(mapWidth)
     private val wall = GMapValue.WALL
     private val room = GMapValue.ROOM
 
     fun proceduralGeneration(): GMap {
-        val seed = 1L
+        val seed = System.currentTimeMillis()
         GRand.setSeed(seed)
-        timed({placeRooms(GAreaPackage.HUGE_GUASS_ROOMS, 10)}, "room gen 1")
-        timed({placeRooms(GAreaPackage.BIG_GUASS_ROOMS, 500)}, "room gen 2")
-        timed({placeRooms(GAreaPackage.SMALL_NORMAL_ROOMS, 10000)}, "room gen 3")
-        timed({surround(room, wall)}, "surround")
-        timed({fixRoomEdges()}, "fix edges")
-        timed({placeHallways()}, "hallways")
-        timed({detectHubs()}, "detect hubs")
+        println("SEED $seed")
+        timed({
+            timed({ placeRooms(GAreaPackage.HUGE_GUASS_ROOMS, 10) }, "room gen 1")
+            timed({ placeRooms(GAreaPackage.BIG_GUASS_ROOMS, 500) }, "room gen 2")
+            timed({ placeRooms(GAreaPackage.SMALL_NORMAL_ROOMS, 10000) }, "room gen 3")
+            timed({ surround(room, wall) }, "surround  ")
+            timed({ placeHallways() }, "hallways  ")
+            timed({ surround(room, wall) }, "surround  ")
+            timed({ fixRoomEdges() }, "fix edges ")
+            timed({ detectHubs() }, "hub detect")
+            timed({ keepBiggestHubs() }, "hub delete")
+        }, "==============\nTOTAL     ")
+        println("")
         return processValues()
+    }
+
+    private fun keepBiggestHubs() {
+        map.hubs.sort { one, two -> two.size - one.size }
+        for (i in 1 until map.hubs.size) {
+            val hub = map.hubs[i]
+            hub.forEach {
+                map.remove(it)
+            }
+        }
+        map.hubs.removeRange(1, map.hubs.size - 1)
+        map.forEach(Consumer { entry ->
+            val i = entry.key
+            if (map.contains(i, wall) && !map.containsOnly(i - 1, room) && !map.containsOnly(i + 1, room) &&
+                    !map.containsOnly(i + mapWidth, room) && !map.containsOnly(i - mapWidth, room) &&
+                    !map.containsOnly(i + mapWidth + 1, room) && !map.containsOnly(i + mapWidth - 1, room) &&
+                    !map.containsOnly(i - mapWidth + 1, room) && !map.containsOnly(i - mapWidth - 1, room))
+                map.remove(entry.key)
+        })
     }
 
     private fun timed(function: () -> Unit, output: String) {
@@ -70,7 +95,7 @@ class GLevelLoader {
             if (roomNotConnected(it)) {
                 val dirX = it.centerX >= mapHalfWidth
                 val dirY = it.centerY >= mapHalfWidth
-                for (i in 0 until (it.width + it.height) / 2) {
+                for (i in 0 until (it.width + it.height) * 2) {
                     if (dirX && dirY)   hallwayHorizontal(it, -1, it.x - i)
                     if (!dirX && !dirY) hallwayHorizontal(it,  1, (it.x - 1) + it.width + i)
                     if (dirY && !dirX)  hallwayVertical(it, -1, it.y - i)
@@ -85,17 +110,22 @@ class GLevelLoader {
         map.placeIfNot(it.centerX - 2, baseY, wall, room)
         map.placeIfNot(it.centerX + 1, baseY, wall, room)
         // terminator
-        map.placeIfNot(it.centerX + 1, baseY + mod, wall, room)
-        map.placeIfNot(it.centerX, baseY + mod, wall, room)
-        map.placeIfNot(it.centerX - 1, baseY + mod, wall, room)
-        map.placeIfNot(it.centerX - 2, baseY + mod, wall, room)
+        placeTunnel(it.centerX + 1, baseY + mod)
+        placeTunnel(it.centerX, baseY + mod)
+        placeTunnel(it.centerX - 1, baseY + mod)
+        placeTunnel(it.centerX - 2, baseY + mod)
 
-        if (isWall(it.centerX, baseY))
-            map.removeVal(it.centerX, baseY, wall)
-        if (isWall(it.centerX - 1, baseY))
-            map.removeVal(it.centerX - 1, baseY, wall)
-        map.addVal(it.centerX, baseY, room)
-        map.addVal(it.centerX - 1, baseY, room)
+        // center
+        map.setVal(it.centerX, baseY, room)
+        map.setVal(it.centerX - 1, baseY, room)
+    }
+
+    private fun placeTunnel(x: Int, y: Int) {
+        if (map.contains(x, y, wall)) {
+            map.setVal(x, y, room)
+        } else {
+            map.placeIfNot(x, y, wall, room)
+        }
     }
 
     private fun hallwayHorizontal(it: GArea, mod: Int, baseX: Int) {
@@ -103,17 +133,13 @@ class GLevelLoader {
         map.placeIfNot(baseX, it.centerY - 2, wall, room)
         map.placeIfNot(baseX, it.centerY + 1, wall, room)
         // terminator
-        map.placeIfNot(baseX + mod, it.centerY + 1, wall, room)
-        map.placeIfNot(baseX + mod, it.centerY, wall, room)
-        map.placeIfNot(baseX + mod, it.centerY - 1, wall, room)
-        map.placeIfNot(baseX + mod, it.centerY - 2, wall, room)
+        placeTunnel(baseX + mod, it.centerY + 1)
+        placeTunnel(baseX + mod, it.centerY)
+        placeTunnel(baseX + mod, it.centerY - 1)
+        placeTunnel(baseX + mod, it.centerY - 2)
 
-        if (isWall(baseX, it.centerY))
-            map.removeVal(baseX, it.centerY, wall)
-        if (isWall(baseX, it.centerY - 1))
-            map.removeVal(baseX, it.centerY - 1, wall)
-        map.addVal(baseX, it.centerY, room)
-        map.addVal(baseX, it.centerY - 1, room)
+        map.setVal(baseX, it.centerY, room)
+        map.setVal(baseX, it.centerY - 1, room)
     }
 
     private fun fixRoomEdges() {
@@ -224,6 +250,8 @@ class GLevelLoader {
             it.forEach { square ->
                 val coord = map.unconvert(square)
                 img.setRGB(coord.first, (mapWidth - 1) - coord.second, color, drawSize)
+                if (map.contains(coord.first, coord.second, wall))
+                    img.setRGB(coord.first, (mapWidth - 1) - coord.second, Color.DARK_GRAY.rgb, drawSize)
             }
         }
     }
