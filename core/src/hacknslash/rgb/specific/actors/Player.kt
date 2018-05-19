@@ -17,7 +17,6 @@ class Player private constructor() :
         GActor(Const.playerDim, GVec2.get(15f, 15f), CollisionBits.player, CollisionBits.playerCollisions),
         GMover,
         GControllable,
-//        GKinematic,
         GShooter,
         GObjectParticleEmitter {
 
@@ -38,8 +37,10 @@ class Player private constructor() :
         keyPressed(Input.Keys.RIGHT, {addVelocity(Const.playerImpulse, 0f)})
     }
 
-    override fun setup(): GActor {
-        super.setup()
+    fun setup(pos: GVec2): GActor {
+        println("pos $pos")
+        initPos.set(pos)
+        setup()
         body.fixtureList.first().friction = 1f
         body.fixtureList.first().density = 1f
         return this

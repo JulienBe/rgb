@@ -18,6 +18,7 @@ open class GAssMan(val pack: String = "atlas.pack") : AssetManager(), AssetError
             "Wall"              to "whitesqure",
             "Enemy"             to "whitesqure",
             "Energy"            to "whitesqure",
+            "Floor"             to "whitesqure",
             "Magnet"            to "whitesqure"
     )
     private val soundMapping = gdxMapOf(

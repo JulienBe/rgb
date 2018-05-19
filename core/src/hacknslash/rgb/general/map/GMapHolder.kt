@@ -99,7 +99,11 @@ class GMapHolder(val mapWidth: Int) {
     }
 
     fun exist(x: Int, y: Int): Boolean {
-        return mapArray.containsKey(convert(x, y))
+        return exist(convert(x, y))
+    }
+
+    fun exist(coord: Int): Boolean {
+        return mapArray.containsKey(coord)
     }
 
     fun containsEdges(x: Int, y: Int, width: Int, height: Int, value: GMapValue): Boolean {
@@ -132,6 +136,14 @@ class GMapHolder(val mapWidth: Int) {
     fun containsOnly(i: Int, value: GMapValue): Boolean {
         val vals = getVals(i)
         return vals.size == 1 && vals.first() == value
+    }
+
+    fun cleanupRooms() {
+        rooms.filter {
+            !mapArray.containsKey(convert(it.x, it.y))
+        }.forEach {
+            rooms.removeValue(it, true)
+        }
     }
 
 }

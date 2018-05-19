@@ -1,6 +1,7 @@
 package hacknslash.rgb.general.map
 
 import hacknslash.rgb.general.GRand
+import hacknslash.rgb.general.physics.GDim
 import hacknslash.rgb.specific.actors.Wall
 import ktx.collections.GdxArray
 import ktx.collections.GdxSet
@@ -19,9 +20,9 @@ class GLevelLoader {
     val map = GMapHolder(mapWidth)
     private val wall = GMapValue.WALL
     private val room = GMapValue.ROOM
+    private val seed = System.currentTimeMillis()
 
     fun proceduralGeneration(): GMap {
-        val seed = System.currentTimeMillis()
         GRand.setSeed(seed)
         println("SEED $seed")
         timed({
@@ -53,9 +54,11 @@ class GLevelLoader {
             if (map.contains(i, wall) && !map.containsOnly(i - 1, room) && !map.containsOnly(i + 1, room) &&
                     !map.containsOnly(i + mapWidth, room) && !map.containsOnly(i - mapWidth, room) &&
                     !map.containsOnly(i + mapWidth + 1, room) && !map.containsOnly(i + mapWidth - 1, room) &&
-                    !map.containsOnly(i - mapWidth + 1, room) && !map.containsOnly(i - mapWidth - 1, room))
+                    !map.containsOnly(i - mapWidth + 1, room) && !map.containsOnly(i - mapWidth - 1, room)) {
                 map.remove(entry.key)
+            }
         })
+        map.cleanupRooms()
     }
 
     private fun timed(function: () -> Unit, output: String) {
@@ -239,9 +242,9 @@ class GLevelLoader {
                     img.setRGB(x, y, Color.DARK_GRAY.rgb, drawSize)
             }
         drawHubs(img)
-        val f = File("/home/j/rgb/map${System.currentTimeMillis()}.png")
+        val f = File("/home/j/rgb/$seed.png")
         ImageIO.write(img, "png", f)
-        return GMap(walls, map)
+        return GMap(walls, map, GDim(squareWidth, squareWidth))
     }
 
     private fun drawHubs(img: BufferedImage) {

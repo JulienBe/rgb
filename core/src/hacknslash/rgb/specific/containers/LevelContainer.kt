@@ -3,6 +3,7 @@ package hacknslash.rgb.specific.containers
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.utils.PerformanceCounter
 import hacknslash.rgb.general.*
 import hacknslash.rgb.general.GAssMan
 import hacknslash.rgb.general.bundles.GBundle
@@ -22,15 +23,19 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
         val e = Energy.get(map)
         b.actors.toSetup(e)
     }, 1000f)
+    val particlesPerfCounter = PerformanceCounter("particles")
 
     init {
-//        for (i in 0..20)
-//            GLevelLoader().proceduralGeneration()
-        b.player.setup()
+        b.player.setup(map.getPlayerStartup())
         shapeRenderer.setAutoShapeType(true)
         map.walls.forEach {
             b.actors.toSetup(it)
         }
+
+        map.rooms.forEach {
+            map.addEnergy(it.centerX, it.centerY, 100f)
+        }
+
         for (i in 1..0)
             b.actors.toSetup(
                     EnergyMagnet(GVec2.get(map.xInside(EnergyMagnet.dim), map.yInside(EnergyMagnet.dim)))
@@ -48,12 +53,18 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
 
         bloom.capture()
         batch.begin()
+        map.display()
+        map.act()
+        particlesPerfCounter.start()
         b.particles.act(batch)
+        particlesPerfCounter.stop()
+        particlesPerfCounter.tick()
         batch.setColor(1f, 1f, 1f, 1f)
         b.player.act()
         b.actors.act()
         batch.end()
         bloom.render()
+        println(particlesPerfCounter.toString())
 //        debug()
     }
 
@@ -67,7 +78,7 @@ class LevelContainer(game: Game, assMan: GAssMan, spriteBatch: SpriteBatch) : GS
     }
 
     companion object {
-        const val width = 160f
-        const val height = 100f
+        const val width = 1600f
+        const val height = 1000f
     }
 }
